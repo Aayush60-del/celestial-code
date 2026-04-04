@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Celestial Code</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+
+    /* ---- SIDEBAR ---- */
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: #8A8780;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .sidebar-item:hover {
+      background: #161719;
+      color: #F5F0E8;
+    }
+    .sidebar-item.active {
+      background: #161719;
+      color: #F5F0E8;
+      border: 1px solid #1E1F23;
+    }
+
+    /* ---- NAVBAR SEARCH ---- */
+    .search-input {
+      background: #161719;
+      border: 1px solid #1E1F23;
+      border-radius: 8px;
+      padding: 8px 14px 8px 36px;
+      color: #F5F0E8;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      outline: none;
+      width: 280px;
+      transition: border-color 0.2s ease;
+    }
+    .search-input:focus { border-color: #C9B99A; }
+    .search-input::placeholder { color: #8A8780; }
+
+    /* ---- STAT CARDS ---- */
+    .stat-card {
+      background: #0F1012;
+      border: 1px solid #1E1F23;
+      border-radius: 12px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    /* ---- BAR CHART ---- */
+    .bar-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 120px;
+    }
+    .bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      background: #1E1F23;
+      transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-height: 4px;
+      position: relative;
+    }
+    .bar.today {
+      background: #C9B99A; /* golden — aaj ka bar */
+    }
+    .bar-label {
+      font-size: 11px;
+      color: #8A8780;
+      text-align: center;
+    }
+
+    /* ---- FILTER TABS ---- */
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      background: transparent;
+      color: #8A8780;
+    }
+    .filter-btn:hover { color: #F5F0E8; background: #161719; }
+    .filter-btn.active {
+      background: #161719;
+      color: #F5F0E8;
+      border-color: #1E1F23;
+    }
+
+    /* ---- PROBLEM TABLE ---- */
+    .problem-row {
+      display: grid;
+      grid-template-columns: 50px 1fr 110px 110px 1fr 80px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #1E1F23;
+      transition: background 0.15s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .problem-row:hover { background: #0F1012; }
+    .problem-row:last-child { border-bottom: none; }
+
+    /* Difficulty badges */
+    .badge-easy   { color: #4ADE80; background: rgba(74,222,128,0.08); padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-medium { color: #FBBF24; background: rgba(251,191,36,0.08);  padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-hard   { color: #F87171; background: rgba(248,113,113,0.08); padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+    /* Problem tag chips */
+    .tag-chip {
+      background: #161719;
+      border: 1px solid #1E1F23;
+      color: #8A8780;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    /* ---- PROGRESS BAR ---- */
+    .progress-bar-bg {
+      background: #1E1F23;
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: #C9B99A;
+      transition: width 1s ease;
+    }
+
+    /* ---- RECOMMENDED CARD ---- */
+    .rec-card {
+      padding: 14px;
+      border-bottom: 1px solid #1E1F23;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .rec-card:hover { background: #161719; }
+    .rec-card:last-child { border-bottom: none; }
+
+    /* ---- FLOATING AI BUTTON ---- */
+    .ai-float-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: #F5F0E8;
+      color: #08090A;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 24px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      z-index: 100;
+    }
+    .ai-float-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    /* ---- NOTIFICATION DOT ---- */
+    .notif-dot {
+      width: 7px; height: 7px;
+      background: #F87171;
+      border-radius: 50%;
+      position: absolute;
+      top: -1px; right: -1px;
+    }
+
+    /* ---- STREAK BADGE ---- */
+    .streak-badge {
+      background: #161719;
+      border: 1px solid #1E1F23;
+      border-radius: 50px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #F5F0E8;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #08090A; }
+    ::-webkit-scrollbar-thumb { background: #1E1F23; border-radius: 3px; }
+
+  </style>
+</head>
+
+<body style="background: #08090A; color: #F5F0E8; font-family: 'Outfit', sans-serif; min-height: 100vh;">
+
+
+  <!-- ================================
+       NAVBAR
+  ================================ -->
+  <nav style="
+    height: 56px;
+    background: #0F1012;
+    border-bottom: 1px solid #1E1F23;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  ">
+
+    <!-- Left — Logo -->
+    <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0;">
+      <div style="width:30px;height:30px;border:1px solid #C9B99A;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <div style="width:8px;height:8px;background:#C9B99A;border-radius:50%;box-shadow:0 0 6px #C9B99A;"></div>
+      </div>
+      <span style="font-size:16px;font-weight:700;color:#F5F0E8;">
+        Celestial <span style="color:#C9B99A;">Code</span>
+      </span>
+    </a>
+
+    <!-- Center — Search -->
+    <div style="position:relative;">
+      <!-- Search icon -->
+      <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.4;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search problems, tags, users..."
+        id="searchInput"
+      >
+    </div>
+
+    <!-- Right — Streak + Notif + Profile -->
+    <div style="display:flex;align-items:center;gap:12px;">
+
+      <!-- Streak -->
+      <div class="streak-badge">
+        🔥 <span id="streakCount">24</span> Day Streak
+      </div>
+
+      <!-- Notification bell -->
+      <div style="position:relative;cursor:pointer;" onclick="toggleNotif()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A8780" stroke-width="1.8">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notif-dot"></div>
+      </div>
+
+      <!-- Profile avatar -->
+      <div style="
+        width:34px;height:34px;
+        background:#1E1F23;
+        border:1px solid #C9B99A;
+        border-radius:50%;
+        display:flex;align-items:center;justify-content:center;
+        font-size:13px;font-weight:700;color:#C9B99A;
+        cursor:pointer;
+      " onclick="window.location.href='profile.html'">
+        A
+      </div>
+
+      <!-- User info -->
+      <div style="cursor:pointer;" onclick="window.location.href='profile.html'">
+        <p style="font-size:13px;font-weight:600;color:#F5F0E8;">Dev_X</p>
+        <p style="font-size:11px;color:#8A8780;">Lvl 42 Archmage</p>
+      </div>
+
+    </div>
+  </nav>
+
+
+  <!-- ================================
+       MAIN — Sidebar + Content
+  ================================ -->
+  <div style="display:flex;">
+
+    <!-- ================================
+         SIDEBAR
+    ================================ -->
+    <aside style="
+      width: 210px;
+      min-width: 210px;
+      height: calc(100vh - 56px);
+      background: #0F1012;
+      border-right: 1px solid #1E1F23;
+      position: sticky;
+      top: 56px;
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    ">
+
+      <!-- Nav links -->
+      <div style="display:flex;flex-direction:column;gap:2px;">
+
+        <a href="dashboard.html" class="sidebar-item active">
+          <!-- Grid icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="problem.html" class="sidebar-item">
+          <!-- Code icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/>
+          </svg>
+          Problems
+        </a>
+
+        <a href="profile.html" class="sidebar-item">
+          <!-- User icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Profile
+        </a>
+
+        <a href="leaderboard.html" class="sidebar-item">
+          <!-- Bar chart icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6"  y1="20" x2="6"  y2="14"/>
+          </svg>
+          Leaderboard
+        </a>
+
+        <a href="#" class="sidebar-item">
+          <!-- Settings icon -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Settings
+        </a>
+
+      </div>
+
+      <!-- Bottom — Upgrade card -->
+      <div style="
+        background: #0F1012;
+        border: 1px solid #1E1F23;
+        border-radius: 10px;
+        padding: 14px;
+      ">
+        <p style="font-size:11px;color:#8A8780;margin-bottom:10px;">Limitless potential awaits.</p>
+        <button style="
+          width:100%;padding:8px;
+          background:#F5F0E8;color:#08090A;
+          border:none;border-radius:6px;
+          font-family:'Outfit',sans-serif;
+          font-size:13px;font-weight:600;
+          cursor:pointer;
+          transition: opacity 0.2s;
+        " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          Upgrade to Pro
+        </button>
+      </div>
+
+    </aside>
+
+
+    <!-- ================================
+         MAIN CONTENT
+    ================================ -->
+    <main style="flex:1;padding:28px;overflow-x:hidden;">
+
+      <!-- ---- Welcome Row ---- -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;">
+        <div>
+          <h1 style="font-size:30px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;">
+            Welcome back, <span style="color:#C9B99A;">Alex.</span>
+          </h1>
+          <p style="font-size:14px;color:#8A8780;">
+            You've solved 12 problems this week. You're in the top 5% of active users today.
+          </p>
+
+          <!-- Language tags -->
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <span style="background:#161719;border:1px solid #1E1F23;border-radius:20px;padding:3px 12px;font-size:12px;color:#4ADE80;">● Python</span>
+            <span style="background:#161719;border:1px solid #1E1F23;border-radius:20px;padding:3px 12px;font-size:12px;color:#8A8780;">● C++</span>
+            <span style="background:#161719;border:1px solid #1E1F23;border-radius:20px;padding:3px 12px;font-size:12px;color:#FBBF24;">● JavaScript</span>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:10px;flex-shrink:0;">
+          <button style="
+            padding:9px 18px;
+            background:transparent;
+            border:1px solid #1E1F23;
+            border-radius:8px;
+            color:#F5F0E8;
+            font-family:'Outfit',sans-serif;
+            font-size:13px;font-weight:500;
+            cursor:pointer;
+            transition: border-color 0.2s;
+          " onmouseover="this.style.borderColor='#8A8780'" onmouseout="this.style.borderColor='#1E1F23'">
+            View History
+          </button>
+          <button style="
+            padding:9px 18px;
+            background:#F5F0E8;
+            border:none;border-radius:8px;
+            color:#08090A;
+            font-family:'Outfit',sans-serif;
+            font-size:13px;font-weight:600;
+            cursor:pointer;
+            transition: opacity 0.2s;
+          " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            Resume Session
+          </button>
+        </div>
+      </div>
+
+
+      <!-- ---- Stats + Chart + Side Panel ---- -->
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:16px;margin-bottom:20px;">
+
+        <!-- LEFT — Chart + Stats -->
+        <div style="background:#0F1012;border:1px solid #1E1F23;border-radius:12px;padding:20px;">
+
+          <!-- Chart header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <!-- Chart icon -->
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8780" stroke-width="1.8">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6"  y1="20" x2="6"  y2="14"/>
+              </svg>
+              <span style="font-size:14px;font-weight:600;color:#F5F0E8;">Performance Overview</span>
+            </div>
+            <span style="font-size:12px;color:#8A8780;">This Week</span>
+          </div>
+
+          <!-- Bar Chart — Pure CSS/JS -->
+          <div class="bar-container" id="barChart">
+            <!-- JS se bars fill honge -->
+          </div>
+
+          <!-- Stats row -->
+          <div style="display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid #1E1F23;">
+
+            <div>
+              <p style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Accuracy</p>
+              <p style="font-size:22px;font-weight:700;color:#F5F0E8;">94.2%</p>
+            </div>
+
+            <div style="background:#1E1F23;"></div>
+
+            <div>
+              <p style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Global Rank</p>
+              <p style="font-size:22px;font-weight:700;color:#F5F0E8;">#1,402</p>
+            </div>
+
+            <div style="background:#1E1F23;"></div>
+
+            <div>
+              <p style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Points</p>
+              <p style="font-size:22px;font-weight:700;color:#C9B99A;">12,450 XP</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- RIGHT — Weekly Target + Recommended -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <!-- Weekly Target -->
+          <div style="background:linear-gradient(135deg,#2D1B69,#1a1040);border:1px solid #3D2B89;border-radius:12px;padding:20px;">
+            <p style="font-size:10px;color:#A78BFA;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Weekly Target</p>
+            <h3 style="font-size:20px;font-weight:700;color:#F5F0E8;margin-bottom:14px;line-height:1.3;">Dynamic Programming<br>Master</h3>
+
+            <!-- Progress bar -->
+            <div class="progress-bar-bg" style="margin-bottom:8px;">
+              <div class="progress-bar-fill" id="weeklyProgress" style="width:0%;background:#A78BFA;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <span style="font-size:12px;color:#A78BFA;">6/10 completed</span>
+              <span style="font-size:12px;color:#8A8780;">60%</span>
+            </div>
+
+            <button style="
+              width:100%;padding:9px;
+              background:#7C3AED;
+              border:none;border-radius:8px;
+              color:#F5F0E8;
+              font-family:'Outfit',sans-serif;
+              font-size:13px;font-weight:600;
+              cursor:pointer;
+              transition: opacity 0.2s;
+            " onclick="window.location.href='problem.html'"
+              onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+              Continue Practice
+            </button>
+          </div>
+
+          <!-- Recommended -->
+          <div style="background:#0F1012;border:1px solid #1E1F23;border-radius:12px;overflow:hidden;flex:1;">
+            <div style="padding:14px 16px;border-bottom:1px solid #1E1F23;display:flex;align-items:center;gap:6px;">
+              <span style="color:#FBBF24;font-size:13px;">⚡</span>
+              <span style="font-size:13px;font-weight:600;color:#F5F0E8;">Recommended for you</span>
+            </div>
+
+            <div class="rec-card" onclick="window.location.href='problem.html'">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;color:#F5F0E8;">Alien Dictionary</span>
+                <span class="badge-hard">Hard</span>
+              </div>
+              <p style="font-size:11px;color:#8A8780;">Topic: Topological Sort, Graphs</p>
+            </div>
+
+            <div class="rec-card" onclick="window.location.href='problem.html'">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;color:#F5F0E8;">Gas Station</span>
+                <span class="badge-medium">Medium</span>
+              </div>
+              <p style="font-size:11px;color:#8A8780;">Topic: Greedy Algorithms</p>
+            </div>
+
+            <div class="rec-card" onclick="window.location.href='problem.html'">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;font-weight:600;color:#F5F0E8;">Climbing Stairs</span>
+                <span class="badge-easy">Easy</span>
+              </div>
+              <p style="font-size:11px;color:#8A8780;">Topic: Dynamic Programming</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ---- Problem Feed ---- -->
+      <div style="background:#0F1012;border:1px solid #1E1F23;border-radius:12px;overflow:hidden;">
+
+        <!-- Feed header + filters -->
+        <div style="padding:16px 20px;border-bottom:1px solid #1E1F23;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8A8780" stroke-width="1.8">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            <span style="font-size:15px;font-weight:600;">Global Problem Feed</span>
+          </div>
+
+          <!-- Filter buttons -->
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="filter-btn active" onclick="filterProblems('all', this)">All Levels</button>
+            <button class="filter-btn" onclick="filterProblems('Easy', this)">Easy</button>
+            <button class="filter-btn" onclick="filterProblems('Medium', this)">Medium</button>
+            <button class="filter-btn" onclick="filterProblems('Hard', this)">Hard</button>
+            <div style="width:1px;height:20px;background:#1E1F23;margin:0 4px;"></div>
+            <button class="filter-btn" style="display:flex;align-items:center;gap:6px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
+              </svg>
+              Tags
+            </button>
+          </div>
+        </div>
+
+        <!-- Table header -->
+        <div class="problem-row" style="background:#08090A;cursor:default;padding:10px 16px;">
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">#</span>
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">Title</span>
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">Difficulty</span>
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">Acceptance</span>
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">Tags</span>
+          <span style="font-size:11px;color:#8A8780;letter-spacing:1px;text-transform:uppercase;">Status</span>
+        </div>
+
+        <!-- Problem rows — JS se render honge -->
+        <div id="problemList"></div>
+
+      </div>
+
+    </main>
+  </div>
+
+
+  <!-- Floating AI Button -->
+  <button class="ai-float-btn" onclick="window.location.href='problem.html'">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+    </svg>
+    Ask Celestial AI
+  </button>
+
+
+  <script>
+    // ================================
+    // PROBLEM DATA
+    // Yeh baad mein MongoDB se aayega
+    // Abhi hardcoded hai
+    // ================================
+    const problems = [
+      { id:'001', title:'Two Sum Array Mapping',    difficulty:'Easy',   acceptance:'48.2%', tags:['Arrays','Hash Table'],    status:'solved'   },
+      { id:'042', title:'Trapping Rain Water',      difficulty:'Hard',   acceptance:'22.5%', tags:['DP','Two Pointers'],      status:'unsolved' },
+      { id:'198', title:'House Robber II',          difficulty:'Medium', acceptance:'38.9%', tags:['DP','Recursion'],         status:'attempted' },
+      { id:'207', title:'Course Schedule III',      difficulty:'Medium', acceptance:'41.2%', tags:['Graphs','BFS'],           status:'unsolved' },
+      { id:'084', title:'Largest Rectangle Histogram', difficulty:'Hard', acceptance:'19.8%', tags:['Stack','Arrays'],        status:'unsolved' },
+      { id:'021', title:'Merge Two Sorted Lists',   difficulty:'Easy',   acceptance:'62.1%', tags:['Linked List'],           status:'solved'   },
+      { id:'105', title:'Construct Binary Tree',    difficulty:'Medium', acceptance:'33.4%', tags:['Trees','DFS'],           status:'unsolved' },
+      { id:'322', title:'Coin Change',              difficulty:'Medium', acceptance:'29.7%', tags:['DP','BFS'],              status:'solved'   },
+    ];
+
+    // Status icon dikhane ke liye
+    // Har status ke liye alag icon
+    function getStatusIcon(status) {
+      if (status === 'solved') {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>`;
+      } else if (status === 'attempted') {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>`;
+      } else {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E1F23" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`;
+      }
+    }
+
+    // Problems render karo
+    function renderProblems(list) {
+      const container = document.getElementById('problemList');
+      container.innerHTML = ''; // pehle clear karo
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="padding:40px;text-align:center;color:#8A8780;">No problems found</div>`;
+        return;
+      }
+
+      list.forEach(p => {
+        const row = document.createElement('a');
+        row.href = 'problem.html';
+        row.className = 'problem-row';
+
+        // Difficulty badge choose karo
+        let badgeClass = 'badge-easy';
+        if (p.difficulty === 'Medium') badgeClass = 'badge-medium';
+        if (p.difficulty === 'Hard')   badgeClass = 'badge-hard';
+
+        // Tags HTML banao
+        const tagsHTML = p.tags.map(t => `<span class="tag-chip">${t}</span>`).join('');
+
+        row.innerHTML = `
+          <span style="font-size:13px;color:#8A8780;font-family:'JetBrains Mono',monospace;">${p.id}</span>
+          <span style="font-size:14px;font-weight:500;color:#F5F0E8;">${p.title}</span>
+          <span><span class="${badgeClass}">${p.difficulty}</span></span>
+          <span style="font-size:13px;color:#8A8780;">${p.acceptance}</span>
+          <span>${tagsHTML}</span>
+          <span style="display:flex;justify-content:center;">${getStatusIcon(p.status)}</span>
+        `;
+
+        container.appendChild(row);
+      });
+    }
+
+    // Filter karo
+    function filterProblems(level, btn) {
+      // Active button update karo
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter lagao
+      if (level === 'all') {
+        renderProblems(problems);
+      } else {
+        renderProblems(problems.filter(p => p.difficulty === level));
+      }
+    }
+
+    // Pehli baar render
+    renderProblems(problems);
+
+
+    // ================================
+    // SEARCH — problems filter karo
+    // ================================
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+
+      if (query === '') {
+        renderProblems(problems);
+        return;
+      }
+
+      // Title ya tags mein search karo
+      const filtered = problems.filter(p =>
+        p.title.toLowerCase().includes(query) ||
+        p.tags.some(t => t.toLowerCase().includes(query)) ||
+        p.difficulty.toLowerCase().includes(query)
+      );
+
+      renderProblems(filtered);
+    });
+
+
+    // ================================
+    // BAR CHART — Weekly performance
+    // Pure JS se banaya — koi library nahi
+    // ================================
+    const weekData = [
+      { day: 'Mon', problems: 2,  isToday: false },
+      { day: 'Tue', problems: 4,  isToday: false },
+      { day: 'Wed', problems: 7,  isToday: true  }, // aaj
+      { day: 'Thu', problems: 3,  isToday: false },
+      { day: 'Fri', problems: 5,  isToday: false },
+      { day: 'Sat', problems: 2,  isToday: false },
+      { day: 'Sun', problems: 1,  isToday: false },
+    ];
+
+    const maxProblems = Math.max(...weekData.map(d => d.problems)); // sabse bada value
+
+    const chartContainer = document.getElementById('barChart');
+
+    weekData.forEach(data => {
+      const heightPercent = (data.problems / maxProblems) * 100;
+
+      const wrap = document.createElement('div');
+      wrap.className = 'bar-wrap';
+
+      // Aaj ka bar upar label dikhata hai
+      const topLabel = document.createElement('span');
+      topLabel.style.cssText = `font-size:11px;color:${data.isToday ? '#C9B99A' : '#8A8780'};`;
+      topLabel.textContent = data.isToday ? data.day : '';
+
+      const bar = document.createElement('div');
+      bar.className = `bar ${data.isToday ? 'today' : ''}`;
+      bar.style.height = '0%'; // start se 0 — animate hoga
+
+      const label = document.createElement('span');
+      label.className = 'bar-label';
+      label.textContent = data.day;
+
+      wrap.appendChild(topLabel);
+      wrap.appendChild(bar);
+      wrap.appendChild(label);
+      chartContainer.appendChild(wrap);
+
+      // Animation — thodi der baad actual height set karo
+      setTimeout(() => {
+        bar.style.height = heightPercent + '%';
+        bar.style.transition = 'height 0.8s cubic-bezier(0.34,1.56,0.64,1)';
+      }, 300);
+    });
+
+
+    // ================================
+    // WEEKLY PROGRESS BAR ANIMATE
+    // ================================
+    setTimeout(() => {
+      document.getElementById('weeklyProgress').style.width = '60%';
+    }, 500);
+
+
+    // ================================
+    // NOTIFICATION TOGGLE
+    // ================================
+    function toggleNotif() {
+      alert('Notifications: \n✅ Two Sum — Accepted!\n🏆 New badge unlocked: 7-day streak\n⚡ Daily challenge available');
+    }
+
+  </script>
+
+</body>
+</html>
