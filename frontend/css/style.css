@@ -162,3 +162,64 @@ code, pre, textarea.code {
 {
     color: #F5F0E8;
 }
+
+.logo-wrap {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.logo-core {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #C9B99A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Glowing dot */
+.dot {
+  width: 8px;
+  height: 8px;
+  background: #C9B99A;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #C9B99A;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 6px #C9B99A; }
+  50% { box-shadow: 0 0 18px #C9B99A; }
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: -6px;
+  border: 1px dashed #C9B99A55;
+  border-radius: 50%;
+  animation: rotateRing 6s linear infinite;
+}
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.orbit-ring::before {
+  content: '🌕';
+  position: absolute;
+  /* width: 6px;
+  
+  height: 6px; */
+  background: transparent;
+
+  /* background: #000000; */
+  /* border-radius: 50%; */
+  top: -3px;
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
