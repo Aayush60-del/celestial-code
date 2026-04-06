@@ -38,13 +38,13 @@ code, pre, textarea.code {
 }
 
 #orbitRing::before {
-  content: '';
+  content: '🌕';
   position: absolute;
   width: 8px;
   height: 8px;
-  background: #C9B99A;
+  background: transparent;
   border-radius: 50%;
-  top: -4px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
 }
