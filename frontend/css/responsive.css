@@ -1,0 +1,189 @@
+/* Shared responsive overrides for CelestialCode frontend */
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 12px !important;
+    gap: 10px;
+  }
+
+  .search-box,
+  .search-main {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .sidebar,
+  aside[style*="width:200px"],
+  aside[style*="width:220px"] {
+    width: 170px !important;
+    min-width: 170px !important;
+  }
+
+  main,
+  .main,
+  .content {
+    padding: 16px !important;
+  }
+
+  .prob-row {
+    grid-template-columns: 38px 1fr 90px 70px !important;
+  }
+
+  .prob-row > :nth-child(5),
+  .prob-row > :nth-child(6) {
+    display: none !important;
+  }
+
+  .lb-row {
+    grid-template-columns: 44px 1fr 90px 90px !important;
+  }
+
+  .lb-row > :nth-child(5),
+  .lb-row > :nth-child(6) {
+    display: none !important;
+  }
+
+  .sub-row {
+    grid-template-columns: 34px 1fr 70px 70px !important;
+  }
+
+  .sub-row > :nth-child(5),
+  .sub-row > :nth-child(6) {
+    display: none !important;
+  }
+
+  .modal-box {
+    width: min(92vw, 420px) !important;
+  }
+
+  .daily-card {
+    min-height: 220px !important;
+    height: auto !important;
+  }
+
+  .content {
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    height: auto !important;
+    min-height: 52px;
+    padding: 8px 10px !important;
+  }
+
+  .navbar > * {
+    min-width: 0;
+  }
+
+  .sidebar,
+  aside[style*="width:200px"],
+  aside[style*="width:220px"] {
+    display: none !important;
+  }
+
+  .navbar [style*="day streak"],
+  .navbar [style*="streak"] {
+    display: none !important;
+  }
+
+  div[style*="display:flex;"][style*="min-width:0"] {
+    display: block !important;
+  }
+
+  main,
+  .main,
+  .content {
+    padding: 12px !important;
+  }
+
+  .prob-row {
+    grid-template-columns: 32px 1fr 78px !important;
+    padding: 10px 12px !important;
+  }
+
+  .prob-row > :nth-child(4) {
+    display: none !important;
+  }
+
+  .lb-row {
+    grid-template-columns: 36px 1fr 80px !important;
+    padding: 10px 12px !important;
+  }
+
+  .lb-row > :nth-child(4) {
+    display: none !important;
+  }
+
+  .sub-row {
+    grid-template-columns: 30px 1fr 64px !important;
+    padding: 10px 12px !important;
+  }
+
+  .sub-row > :nth-child(4) {
+    display: none !important;
+  }
+
+  .ai-btn {
+    right: 14px !important;
+    bottom: 14px !important;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .tab-btn,
+  .btab-btn {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .daily-header,
+  .daily-problem,
+  .daily-footer {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #leftPanel,
+  div[style*="width:42%"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    border-right: none !important;
+  }
+
+  .vdivider,
+  .hdivider {
+    display: none !important;
+  }
+
+  div[style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  div[style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  div[style*="grid-template-columns:1fr 280px"] {
+    grid-template-columns: 1fr !important;
+  }
+}

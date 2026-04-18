@@ -6,13 +6,104 @@
   <title>Dashboard — Celestial Code</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="icon" type="image/png" sizes="32x32"  href="./image/Golden celestial symbol on black background.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#08090A;color:#F5F0E8;font-family:'Outfit',sans-serif;min-height:100vh;}
+    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:#08090A;}::-webkit-scrollbar-thumb{background:#1a1b1f;border-radius:2px;}
+
+    /* NAVBAR */
+    .navbar{position:sticky;top:0;z-index:100;height:52px;background:rgba(8,9,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #111215;display:flex;align-items:center;justify-content:space-between;padding:0 20px;}
+
+    /* SIDEBAR */
+    .sidebar{width:200px;min-width:200px;height:calc(100vh - 52px);position:sticky;top:52px;border-right:1px solid #111215;display:flex;flex-direction:column;padding:20px 12px;overflow-y:auto;}
+    .nav-link{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:6px;font-size:13px;font-weight:500;color:#5a5956;text-decoration:none;transition:all 0.15s ease;margin-bottom:1px;}
+    .nav-link:hover{color:#F5F0E8;background:#111215;}
+    .nav-link.active{color:#F5F0E8;background:#111215;}
+
+    /* SEARCH */
+    .search-box{background:#0f1012;border:1px solid #1a1b1f;border-radius:7px;padding:7px 12px 7px 32px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:13px;outline:none;width:260px;transition:border-color 0.2s;}
+    .search-box:focus{border-color:#2a2b2f;}
+    .search-box::placeholder{color:#3a3b3f;}
+
+    /* STAT STRIP */
+    .stat-num{font-size:26px;font-weight:700;letter-spacing:-0.5px;}
+    .sec-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#3a3b3f;font-weight:600;}
+
+    /* SKILL BARS */
+    .skill-bar-bg{background:#111215;border-radius:2px;height:3px;overflow:hidden;margin-top:5px;}
+    .skill-bar-fill{height:100%;border-radius:2px;background:#C9B99A;transition:width 1.2s ease;}
+
+    /* HEATMAP */
+    .heat-cell{width:11px;height:11px;border-radius:2px;background:#111215;transition:transform 0.1s ease;cursor:pointer;flex-shrink:0;}
+    .heat-cell:hover{transform:scale(1.4);}
+    .heat-0{background:#111215;}
+    .heat-1{background:#2a2318;border:1px solid #3a3020;}
+    .heat-2{background:#4a3d28;}
+    .heat-3{background:#7a6440;}
+    .heat-4{background:#C9B99A;}
+
+    /* PROBLEM TABLE */
+    .prob-row{display:grid;grid-template-columns:44px 1fr 90px 80px 160px 50px;align-items:center;padding:13px 20px;border-bottom:1px solid #0f1012;transition:background 0.12s ease;cursor:pointer;text-decoration:none;color:inherit;}
+    .prob-row:hover{background:#0c0d10;}
+    .prob-row:last-child{border-bottom:none;}
+    .b-e{color:#4ADE80;background:rgba(74,222,128,0.07);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+    .b-m{color:#FBBF24;background:rgba(251,191,36,0.07);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+    .b-h{color:#F87171;background:rgba(248,113,113,0.07);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+    .tchip{font-size:10px;color:#5a5956;background:#0f1012;border:1px solid #1a1b1f;padding:2px 7px;border-radius:10px;display:inline-block;margin-right:3px;}
+
+    /* FILTER PILLS */
+    .fpill{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid #1a1b1f;background:transparent;color:#5a5956;cursor:pointer;transition:all 0.15s ease;font-family:'Outfit',sans-serif;}
+    .fpill:hover{color:#F5F0E8;border-color:#2a2b2f;}
+    .fpill.active{color:#F5F0E8;border-color:#C9B99A;background:rgba(201,185,154,0.06);}
+
+    /* AI BUTTON */
+    .ai-btn{position:fixed;bottom:28px;right:28px;z-index:200;background:#F5F0E8;color:#08090A;border:none;border-radius:40px;padding:12px 22px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:transform 0.2s ease,box-shadow 0.2s ease;}
+    .ai-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.6);}
+
+    /* TOOLTIP */
+    #heatTooltip{position:fixed;background:#1a1b1f;border:1px solid #2a2b2f;color:#F5F0E8;font-size:11px;padding:5px 10px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity 0.15s;z-index:999;font-family:'Outfit',sans-serif;}
+
+    /* HOVER CARD EFFECT */
+    .hover-card{transition:border-color 0.2s ease;}
+    .hover-card:hover{border-color:#2a2b2f !important;}
+
+    /* QUICK ACTION BTN */
+    .qa-btn{width:100%;padding:9px 12px;background:transparent;border:1px solid #1a1b1f;border-radius:7px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;text-align:left;transition:all 0.15s ease;display:flex;align-items:center;gap:8px;}
+    .qa-btn:hover{background:#111215;color:#F5F0E8;border-color:#2a2b2f;}
+
+    /* PROGRESS BAR */
+    .prog-bg{background:#111215;border-radius:3px;height:4px;overflow:hidden;}
+    .prog-fill{height:100%;border-radius:3px;transition:width 1.2s ease;}
+
+    /* ACHIEVEMENT BADGE */
+    .ach-badge{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+    .ach-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid #1a1b1f;transition:border-color 0.15s,transform 0.15s;}
+    .ach-icon:hover{border-color:#C9B99A33;transform:scale(1.05);}
+    .ach-icon.locked{opacity:0.3;filter:grayscale(1);}
+
+    /* STREAK CALENDAR */
+    .streak-day{width:20px;height:20px;border-radius:4px;background:#111215;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;}
+    .streak-day.done{background:rgba(201,185,154,0.2);color:#C9B99A;border:1px solid #C9B99A33;}
+    .streak-day.today{background:#C9B99A;color:#08090A;}
+    .streak-day.miss{background:#111215;color:#3a3b3f;}
+
+    /* DAILY CHALLENGE TIMER */
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+    .timer-dot{width:6px;height:6px;background:#4ADE80;border-radius:50%;animation:pulse 2s infinite;}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    .fu{animation:fadeUp 0.5s ease forwards;}
+    .fu1{animation-delay:0.05s;opacity:0;}.fu2{animation-delay:0.1s;opacity:0;}.fu3{animation-delay:0.15s;opacity:0;}.fu4{animation-delay:0.2s;opacity:0;}.fu5{animation-delay:0.25s;opacity:0;}
+  </style>
 </head>
 <body>
 
 <div id="heatTooltip"></div>
 
+<!-- ===== NAVBAR ===== -->
 <nav class="navbar">
   <a href="index.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;">
     <div style="width:28px;height:28px;border:1px solid #C9B99A;border-radius:50%;display:flex;align-items:center;justify-content:center;">
@@ -20,71 +111,53 @@
     </div>
     <span style="font-size:15px;font-weight:700;">Celestial <span style="color:#C9B99A;">Code</span></span>
   </a>
-
   <div style="position:relative;">
     <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.3;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input class="search-box" type="text" id="searchInput" placeholder="Search problems, tags...">
   </div>
-
   <div style="display:flex;align-items:center;gap:14px;">
     <div style="display:flex;align-items:center;gap:6px;background:#0f1012;border:1px solid #1a1b1f;border-radius:20px;padding:5px 12px;">
-      <span style="font-size:14px;">🔥</span>
-      <span style="font-size:13px;font-weight:600;">24</span>
-      <span style="font-size:12px;color:#5a5956;">day streak</span>
+      <span style="font-size:14px;">🔥</span><span style="font-size:13px;font-weight:600;">24</span><span style="font-size:12px;color:#5a5956;">day streak</span>
     </div>
-
     <div style="position:relative;cursor:pointer;" onclick="alert('No new notifications')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5a5956" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <div style="width:6px;height:6px;background:#F87171;border-radius:50%;position:absolute;top:-1px;right:-1px;"></div>
     </div>
-
     <div style="display:flex;align-items:center;gap:9px;cursor:pointer;" onclick="window.location.href='profile.html'">
       <div style="width:30px;height:30px;border-radius:50%;background:#1a1b1f;border:1px solid #C9B99A33;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#C9B99A;">A</div>
-      <div>
-        <p style="font-size:12px;font-weight:600;line-height:1.2;">Dev_X</p>
-        <p style="font-size:10px;color:#5a5956;line-height:1.2;">Lvl 42 · Archmage</p>
-      </div>
+      <div><p style="font-size:12px;font-weight:600;line-height:1.2;">Dev_X</p><p style="font-size:10px;color:#5a5956;line-height:1.2;">Lvl 42 · Archmage</p></div>
     </div>
   </div>
 </nav>
 
 <div style="display:flex;">
 
+  <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
     <p class="sec-label" style="margin-bottom:12px;padding:0 10px;">Navigate</p>
-
     <a href="dashboard.html" class="nav-link active">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Dashboard
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
     </a>
-    <a href="problem.html" class="nav-link">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
-      Problems
+    <a href="problemlist.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>Problems
     </a>
     <a href="profile.html" class="nav-link">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Profile
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
     </a>
     <a href="leaderboard.html" class="nav-link">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Leaderboard
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Leaderboard
     </a>
-    <a href="#" class="nav-link">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      Settings
+    <a href="settings.html" class="nav-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
     </a>
 
-    <!-- SKILL BARS — unique to sidebar -->
+    <!-- Skill bars -->
     <div style="margin-top:24px;padding:0 4px;">
       <p class="sec-label" style="margin-bottom:12px;">Your Skills</p>
-
       <div id="skillBars"></div>
     </div>
 
-    <!-- Spacer -->
     <div style="flex:1;"></div>
-
-    <!-- Upgrade -->
     <div style="border:1px solid #1a1b1f;border-radius:8px;padding:12px;margin-top:16px;">
       <p style="font-size:11px;color:#5a5956;margin-bottom:8px;line-height:1.5;">Unlock AI code reviews & contest mode</p>
       <button onclick="alert('Pro coming soon!')" style="width:100%;padding:7px;background:#F5F0E8;color:#08090A;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Upgrade to Pro</button>
@@ -92,121 +165,252 @@
   </aside>
 
   <!-- ===== MAIN CONTENT ===== -->
-  <main style="flex:1;padding:24px 28px;min-width:0;">
+  <main style="flex:1;padding:24px 28px;min-width:0;overflow-y:auto;">
 
     <!-- WELCOME -->
-    <div class="fu fu1" style="margin-bottom:24px;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-        <div>
-          <h1 style="font-size:26px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;">
-            Welcome back, <span style="color:#C9B99A;">Alex.</span>
-          </h1>
-          <p style="font-size:13px;color:#5a5956;">
-            12 problems this week · Top 5% of active users · Ready for the daily challenge?
-          </p>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button style="padding:8px 16px;background:transparent;border:1px solid #1a1b1f;border-radius:7px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;" onmouseover="this.style.borderColor='#2a2b2f';this.style.color='#F5F0E8'" onmouseout="this.style.borderColor='#1a1b1f';this.style.color='#8A8780'">View History</button>
-          <button onclick="window.location.href='problem.html'" style="padding:8px 16px;background:#F5F0E8;border:none;border-radius:7px;color:#08090A;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Resume Session →</button>
-        </div>
+    <div class="fu fu1" style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;">
+      <div>
+        <h1 style="font-size:26px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;">Welcome back, <span style="color:#C9B99A;">Alex.</span></h1>
+        <p style="font-size:13px;color:#5a5956;">12 problems this week · Top 5% of active users · Ready for the daily challenge?</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button style="padding:8px 16px;background:transparent;border:1px solid #1a1b1f;border-radius:7px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;" onmouseover="this.style.borderColor='#2a2b2f';this.style.color='#F5F0E8'" onmouseout="this.style.borderColor='#1a1b1f';this.style.color='#8A8780'">View History</button>
+        <button onclick="window.location.href='problemlist.html'" style="padding:8px 16px;background:#F5F0E8;border:none;border-radius:7px;color:#08090A;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Resume Session →</button>
       </div>
     </div>
 
     <!-- STATS STRIP -->
     <div class="fu fu2" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#111215;border-radius:10px;overflow:hidden;margin-bottom:20px;border:1px solid #111215;">
-
       <div style="background:#08090A;padding:18px 20px;">
         <p class="sec-label" style="margin-bottom:6px;">Problems Solved</p>
         <p class="stat-num">1,402</p>
         <p style="font-size:11px;color:#4ADE80;margin-top:3px;">↑ 12 this week</p>
       </div>
-
       <div style="background:#08090A;padding:18px 20px;">
         <p class="sec-label" style="margin-bottom:6px;">Global Rank</p>
         <p class="stat-num">#428</p>
         <p style="font-size:11px;color:#C9B99A;margin-top:3px;">Top 0.5% globally</p>
       </div>
-
       <div style="background:#08090A;padding:18px 20px;">
         <p class="sec-label" style="margin-bottom:6px;">Accuracy</p>
         <p class="stat-num">94.2%</p>
         <p style="font-size:11px;color:#5a5956;margin-top:3px;">Last 30 submissions</p>
       </div>
-
       <div style="background:#08090A;padding:18px 20px;">
         <p class="sec-label" style="margin-bottom:6px;">Total XP</p>
         <p class="stat-num" style="color:#C9B99A;">12,450</p>
         <p style="font-size:11px;color:#5a5956;margin-top:3px;">Master Tier</p>
       </div>
-
     </div>
 
-    <!-- HEATMAP + WEEKLY TARGET -->
-    <div class="fu fu3" style="display:grid;grid-template-columns:1fr 280px;gap:16px;margin-bottom:20px;">
+    <!-- ROW 1: Daily Challenge + Streak Card -->
+    <div class="fu fu3" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
 
-      <!-- HEATMAP -->
-      <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <div>
-            <p style="font-size:14px;font-weight:600;">Contribution Activity</p>
-            <p style="font-size:11px;color:#5a5956;margin-top:2px;">486 problems solved in the last year</p>
+      <!-- DAILY CHALLENGE CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;width:120px;height:120px;background:radial-gradient(circle,rgba(201,185,154,0.04) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">🌌</span>
+            <span style="font-size:13px;font-weight:600;">Daily Celestial Challenge</span>
           </div>
           <div style="display:flex;align-items:center;gap:5px;">
-            <span style="font-size:10px;color:#5a5956;">Less</span>
-            <div style="width:9px;height:9px;border-radius:2px;background:#111215;"></div>
-            <div style="width:9px;height:9px;border-radius:2px;background:#2a2318;border:1px solid #3a3020;"></div>
-            <div style="width:9px;height:9px;border-radius:2px;background:#4a3d28;"></div>
-            <div style="width:9px;height:9px;border-radius:2px;background:#7a6440;"></div>
-            <div style="width:9px;height:9px;border-radius:2px;background:#C9B99A;"></div>
-            <span style="font-size:10px;color:#5a5956;">More</span>
+            <div class="timer-dot"></div>
+            <span style="font-size:11px;color:#4ADE80;">Live</span>
           </div>
         </div>
-
-        <!-- Month labels -->
-        <div id="monthLabels" style="display:flex;gap:13px;margin-bottom:5px;padding-left:20px;"></div>
-
-        <!-- Heatmap grid -->
-        <div style="display:flex;gap:3px;" id="heatmapGrid"></div>
-
-        <!-- Day labels -->
-        <div style="display:flex;flex-direction:column;gap:0px;margin-top:4px;padding-left:2px;">
-          <div style="display:flex;justify-content:space-between;padding:0 2px;">
-            <span style="font-size:9px;color:#3a3b3f;">Mon</span>
-            <span style="font-size:9px;color:#3a3b3f;">Wed</span>
-            <span style="font-size:9px;color:#3a3b3f;">Fri</span>
-            <span style="font-size:9px;color:#3a3b3f;">Sun</span>
+        <div style="margin-bottom:14px;">
+          <p style="font-size:17px;font-weight:700;margin-bottom:6px;">Two Sum Variations</p>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="color:#FBBF24;background:rgba(251,191,36,0.07);padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;">Medium</span>
+            <span style="font-size:11px;color:#5a5956;">Arrays · Hash Table</span>
           </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5a5956" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            <span style="font-size:11px;color:#5a5956;">Ends in <span id="countdown" style="color:#F5F0E8;font-weight:600;">14h 22m</span></span>
+          </div>
+          <button onclick="window.location.href='problemlist.html'" style="padding:7px 16px;background:#F5F0E8;border:none;border-radius:6px;color:#08090A;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Solve Now →</button>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid #0f1012;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:11px;color:#5a5956;">🪐 Reward:</span>
+          <span style="font-size:11px;color:#C9B99A;font-weight:600;">Saturn Ring Badge + 250 XP</span>
         </div>
       </div>
 
-      <!-- WEEKLY TARGET + RECOMMENDED -->
-      <div style="display:flex;flex-direction:column;gap:12px;">
+      <!-- STREAK CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div>
+            <p style="font-size:13px;font-weight:600;margin-bottom:2px;">🔥 Active Streak</p>
+            <p style="font-size:11px;color:#5a5956;">Keep it going — don't break the chain!</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:28px;font-weight:700;color:#C9B99A;line-height:1;">24</p>
+            <p style="font-size:10px;color:#5a5956;">days</p>
+          </div>
+        </div>
+        <!-- Mini week calendar -->
+        <div style="margin-bottom:14px;">
+          <p class="sec-label" style="margin-bottom:8px;">This Week</p>
+          <div style="display:flex;gap:5px;" id="streakCal"></div>
+        </div>
+        <!-- Monthly heatmap mini -->
+        <div>
+          <p class="sec-label" style="margin-bottom:8px;">Best: <span style="color:#C9B99A;">48 days</span> · Current: <span style="color:#4ADE80;">24 days</span></p>
+          <div style="background:#0f1012;border-radius:6px;height:4px;overflow:hidden;">
+            <div style="width:50%;height:100%;background:linear-gradient(90deg,#C9B99A,#4ADE80);border-radius:6px;"></div>
+          </div>
+          <p style="font-size:10px;color:#5a5956;margin-top:4px;">50% to your personal best</p>
+        </div>
+      </div>
 
-        <!-- Weekly target -->
+    </div>
+
+    <!-- ROW 2: DSA Journey + System Design -->
+    <div class="fu fu3" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+      <!-- DSA JOURNEY CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">🌌</span>
+            <div>
+              <p style="font-size:13px;font-weight:600;">DSA Galaxy Journey</p>
+              <p style="font-size:10px;color:#5a5956;margin-top:1px;">Structured learning path</p>
+            </div>
+          </div>
+          <span style="font-size:11px;color:#C9B99A;font-weight:600;background:rgba(201,185,154,0.08);padding:3px 10px;border-radius:20px;">Level 7</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;" id="dsaTopics"></div>
+        <button onclick="window.location.href='problemlist.html'" style="width:100%;padding:9px;background:transparent;border:1px solid #1a1b1f;border-radius:7px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.background='#111215';this.style.borderColor='#2a2b2f'" onmouseout="this.style.background='transparent';this.style.borderColor='#1a1b1f'">Continue Journey →</button>
+      </div>
+
+      <!-- SYSTEM DESIGN CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;position:relative;overflow:hidden;">
+        <!-- Coming soon overlay -->
+        <div style="position:absolute;top:12px;right:12px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:3px 10px;">
+          <span style="font-size:10px;color:#A78BFA;font-weight:600;">Coming Soon</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <span style="font-size:16px;">🚀</span>
+          <div>
+            <p style="font-size:13px;font-weight:600;">System Design Orbit</p>
+            <p style="font-size:10px;color:#5a5956;margin-top:1px;">Advanced architecture track</p>
+          </div>
+        </div>
+        <div style="opacity:0.5;">
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0f1012;border-radius:6px;">
+              <span style="font-size:12px;">🔒</span><span style="font-size:12px;color:#5a5956;">Distributed Systems</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0f1012;border-radius:6px;">
+              <span style="font-size:12px;">🔒</span><span style="font-size:12px;color:#5a5956;">Database Design</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#0f1012;border-radius:6px;">
+              <span style="font-size:12px;">🔒</span><span style="font-size:12px;color:#5a5956;">API Architecture</span>
+            </div>
+          </div>
+        </div>
+        <button style="width:100%;padding:9px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:7px;color:#A78BFA;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;" onclick="alert('System Design track coming soon! 🚀')">Notify Me When Live</button>
+      </div>
+
+    </div>
+
+    <!-- ROW 3: AI Recommendation + Quick Actions + Achievements -->
+    <div class="fu fu4" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+
+      <!-- AI RECOMMENDATION CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <p style="font-size:13px;font-weight:600;">AI Picks For You</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="aiRecs"></div>
+        <p style="font-size:10px;color:#3a3b3f;margin-top:12px;">Based on your weak topics & recent activity</p>
+      </div>
+
+      <!-- QUICK ACTIONS CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+        <p style="font-size:13px;font-weight:600;margin-bottom:14px;">⚡ Quick Actions</p>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button class="qa-btn" onclick="window.location.href='problemlist.html'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Solve Random Problem
+          </button>
+          <button class="qa-btn" onclick="window.location.href='problemlist.html'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+            Resume Last Session
+          </button>
+          <button class="qa-btn" onclick="window.location.href='problemlist.html?filter=weak'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+            Practice Weak Topics
+          </button>
+          <button class="qa-btn" onclick="window.location.href='leaderboard.html'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            View Leaderboard
+          </button>
+          <button class="qa-btn" onclick="window.location.href='problemlist.html?filter=contest'">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            Join Contest Mode
+          </button>
+        </div>
+      </div>
+
+      <!-- ACHIEVEMENTS CARD -->
+      <div class="hover-card" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+          <p style="font-size:13px;font-weight:600;">🏆 Achievements</p>
+          <span style="font-size:11px;color:#C9B99A;">3/9 earned</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;" id="achievGrid"></div>
+        <button onclick="window.location.href='profile.html'" style="width:100%;padding:7px;background:transparent;border:1px solid #1a1b1f;border-radius:6px;color:#5a5956;font-family:'Outfit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.color='#F5F0E8';this.style.borderColor='#2a2b2f'" onmouseout="this.style.color='#5a5956';this.style.borderColor='#1a1b1f'">View All Badges →</button>
+      </div>
+
+    </div>
+
+    <!-- HEATMAP -->
+    <div class="fu fu4" style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+       
+       
+      </div>
+      <div id="monthLabels" style="display:flex;gap:13px;margin-bottom:5px;padding-left:20px;"></div>
+      <div style="display:flex;gap:3px;" id="heatmapGrid"></div>
+    </div>
+
+    <!-- WEEKLY TARGET + PROBLEM FEED -->
+    <div class="fu fu5" style="display:grid;grid-template-columns:1fr 280px;gap:16px;margin-bottom:20px;">
+
+      <!-- PROBLEM FEED -->
+      
+
+      <!-- WEEKLY TARGET -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="background:linear-gradient(135deg,#1a1030 0%,#0f0820 100%);border:1px solid #2a1f50;border-radius:10px;padding:18px;">
           <p style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7C3AED;margin-bottom:6px;">Weekly Target</p>
           <p style="font-size:17px;font-weight:700;margin-bottom:12px;line-height:1.3;">DP Master<br><span style="color:#A78BFA;">Challenge</span></p>
           <div style="background:rgba(124,58,237,0.15);border-radius:3px;height:4px;overflow:hidden;margin-bottom:6px;">
             <div id="weekProg" style="height:100%;width:0%;background:#7C3AED;border-radius:3px;transition:width 1s ease;"></div>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <span style="font-size:11px;color:#7C3AED;">6 / 10 done</span>
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-size:11px;color:#7C3AED;">6/10 done</span>
             <span style="font-size:11px;color:#5a5956;">60%</span>
           </div>
-          <button onclick="window.location.href='problem.html'" style="width:100%;padding:8px;background:#7C3AED;border:none;border-radius:6px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Continue Practice</button>
+          <button onclick="window.location.href='problemlist.html'" style="width:100%;padding:8px;background:#7C3AED;border:none;border-radius:6px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">Continue Practice</button>
         </div>
-
         <!-- Recommended -->
         <div style="border:1px solid #111215;border-radius:10px;overflow:hidden;flex:1;background:#08090A;">
           <p style="padding:12px 14px;font-size:11px;font-weight:600;color:#5a5956;border-bottom:1px solid #0f1012;letter-spacing:0.5px;">⚡ RECOMMENDED</p>
-          <div style="cursor:pointer;padding:12px 14px;border-bottom:1px solid #0f1012;transition:background 0.1s;" onmouseover="this.style.background='#0c0d10'" onmouseout="this.style.background=''" onclick="window.location.href='problem.html'">
+          <div style="cursor:pointer;padding:12px 14px;border-bottom:1px solid #0f1012;transition:background 0.1s;" onmouseover="this.style.background='#0c0d10'" onmouseout="this.style.background=''" onclick="window.location.href='problemlist.html'">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
               <span style="font-size:13px;font-weight:500;">Alien Dictionary</span>
               <span class="b-h">Hard</span>
             </div>
             <p style="font-size:10px;color:#5a5956;">Topological Sort · Graphs</p>
           </div>
-          <div style="cursor:pointer;padding:12px 14px;transition:background 0.1s;" onmouseover="this.style.background='#0c0d10'" onmouseout="this.style.background=''" onclick="window.location.href='problem.html'">
+          <div style="cursor:pointer;padding:12px 14px;transition:background 0.1s;" onmouseover="this.style.background='#0c0d10'" onmouseout="this.style.background=''" onclick="window.location.href='problemlist.html'">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
               <span style="font-size:13px;font-weight:500;">Gas Station</span>
               <span class="b-m">Medium</span>
@@ -214,47 +418,217 @@
             <p style="font-size:10px;color:#5a5956;">Greedy Algorithms</p>
           </div>
         </div>
-
       </div>
-    </div>
-
-    <!-- PROBLEM FEED -->
-    <div class="fu fu4" style="border:1px solid #111215;border-radius:10px;overflow:hidden;background:#08090A;">
-
-      <!-- Header -->
-      <div style="padding:14px 20px;border-bottom:1px solid #0f1012;display:flex;align-items:center;justify-content:space-between;">
-        <p style="font-size:14px;font-weight:600;">Problem Feed</p>
-        <div style="display:flex;gap:5px;">
-          <button class="fpill active" onclick="filterP('all',this)">All</button>
-          <button class="fpill" onclick="filterP('Easy',this)">Easy</button>
-          <button class="fpill" onclick="filterP('Medium',this)">Medium</button>
-          <button class="fpill" onclick="filterP('Hard',this)">Hard</button>
-        </div>
-      </div>
-
-      <!-- Table head -->
-      <div style="display:grid;grid-template-columns:44px 1fr 90px 80px 160px 50px;padding:10px 20px;background:#08090A;border-bottom:1px solid #0f1012;">
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">#</span>
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">Title</span>
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">Level</span>
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">Accept</span>
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">Tags</span>
-        <span style="font-size:10px;color:#3a3b3f;letter-spacing:1px;text-transform:uppercase;">Done</span>
-      </div>
-
-      <div id="probList"></div>
     </div>
 
   </main>
 </div>
 
 <!-- FLOATING AI BUTTON -->
-<button class="ai-btn" onclick="window.location.href='problem.html'">
+<button class="ai-btn" onclick="window.location.href='problemlist.html'">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
   Ask Celestial AI
 </button>
 
-<script src="js/dashboard.js"></script>
+<script>
+// ================================
+// PROBLEMS DATA
+// ================================
+const problems=[
+  {id:'001',title:'Two Sum Array Mapping',    diff:'Easy',  acc:'48.2%',tags:['Arrays','Hash Table'],done:'yes'},
+  {id:'042',title:'Trapping Rain Water',      diff:'Hard',  acc:'22.5%',tags:['DP','Two Pointers'], done:'no'},
+  {id:'198',title:'House Robber II',          diff:'Medium',acc:'38.9%',tags:['DP','Recursion'],    done:'try'},
+  {id:'207',title:'Course Schedule III',      diff:'Medium',acc:'41.2%',tags:['Graphs','BFS'],      done:'no'},
+  {id:'084',title:'Largest Rectangle',        diff:'Hard',  acc:'19.8%',tags:['Stack','Arrays'],    done:'no'},
+  {id:'021',title:'Merge Two Sorted Lists',   diff:'Easy',  acc:'62.1%',tags:['Linked List'],       done:'yes'},
+];
 
+function statusIcon(d){
+  if(d==='yes') return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>`;
+  if(d==='try') return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>`;
+  return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1F23" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`;
+}
+
+function renderProbs(list){
+  const c=document.getElementById('probList');c.innerHTML='';
+  list.forEach(p=>{
+    const bClass=p.diff==='Easy'?'b-e':p.diff==='Medium'?'b-m':'b-h';
+    const tags=p.tags.map(t=>`<span class="tchip">${t}</span>`).join('');
+    const row=document.createElement('a');
+    row.href='problemlist.html';row.className='prob-row';
+    row.innerHTML=`
+      <span style="font-size:12px;color:#3a3b3f;font-family:'JetBrains Mono',monospace;">${p.id}</span>
+      <span style="font-size:13px;font-weight:500;">${p.title}</span>
+      <span><span class="${bClass}">${p.diff}</span></span>
+      <span style="font-size:12px;color:#5a5956;">${p.acc}</span>
+      <span>${tags}</span>
+      <span style="display:flex;justify-content:center;">${statusIcon(p.done)}</span>
+    `;
+    c.appendChild(row);
+  });
+}
+
+function filterP(level,btn){
+  document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProbs(level==='all'?problems:problems.filter(p=>p.diff===level));
+}
+
+document.getElementById('searchInput').addEventListener('input',function(){
+  const q=this.value.toLowerCase();
+  renderProbs(q?problems.filter(p=>p.title.toLowerCase().includes(q)||p.tags.some(t=>t.toLowerCase().includes(q))):problems);
+});
+
+renderProbs(problems);
+
+// ================================
+// SKILL BARS
+// ================================
+const skills=[
+  {name:'Dynamic Programming',pct:94},
+  {name:'Arrays & Hashing',   pct:88},
+  {name:'Graphs & Trees',     pct:76},
+  {name:'System Design',      pct:58},
+];
+const sb=document.getElementById('skillBars');
+skills.forEach(s=>{
+  sb.innerHTML+=`<div style="margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:11px;color:#5a5956;">${s.name}</span>
+      <span style="font-size:10px;color:#3a3b3f;">${s.pct}%</span>
+    </div>
+    <div class="skill-bar-bg"><div class="skill-bar-fill" data-pct="${s.pct}" style="width:0%;"></div></div>
+  </div>`;
+});
+setTimeout(()=>document.querySelectorAll('.skill-bar-fill').forEach(b=>b.style.width=b.dataset.pct+'%'),400);
+
+// ================================
+// HEATMAP
+// ================================
+(function buildHeatmap(){
+  const grid=document.getElementById('heatmapGrid');
+  const months=document.getElementById('monthLabels');
+  const tooltip=document.getElementById('heatTooltip');
+  const monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const today=new Date();
+  let lastMonth=-1,monthHTML='';
+  for(let w=0;w<52;w++){
+    const col=document.createElement('div');
+    col.style.cssText='display:flex;flex-direction:column;gap:3px;';
+    for(let d=0;d<7;d++){
+      const daysAgo=(51-w)*7+(6-d);
+      const date=new Date(today);date.setDate(today.getDate()-daysAgo);
+      const recency=1-daysAgo/364;
+      let lvl=0;
+      if(Math.random()<recency*0.6) lvl=Math.floor(Math.random()*4)+1;
+      const cell=document.createElement('div');
+      cell.className=`heat-cell heat-${lvl}`;
+      const dateStr=date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      const count=lvl===0?0:lvl===1?1:lvl===2?2:lvl===3?4:7;
+      cell.addEventListener('mousemove',e=>{
+        tooltip.style.opacity='1';tooltip.style.left=(e.clientX+12)+'px';tooltip.style.top=(e.clientY-28)+'px';
+        tooltip.textContent=`${count} problem${count!==1?'s':''} · ${dateStr}`;
+      });
+      cell.addEventListener('mouseleave',()=>tooltip.style.opacity='0');
+      col.appendChild(cell);
+      if(d===0){const m=date.getMonth();if(m!==lastMonth){lastMonth=m;monthHTML+=`<span style="font-size:9px;color:#3a3b3f;min-width:28px;">${monthNames[m]}</span>`;}else{monthHTML+=`<span style="min-width:28px;"></span>`;}}
+    }
+    grid.appendChild(col);
+  }
+  months.innerHTML=monthHTML;
+})();
+
+// ================================
+// WEEKLY PROGRESS
+// ================================
+setTimeout(()=>document.getElementById('weekProg').style.width='60%',500);
+
+// ================================
+// STREAK CALENDAR
+// ================================
+(function buildStreak(){
+  const days=['M','T','W','T','F','S','S'];
+  const done=[true,true,true,true,true,false,false];
+  const cal=document.getElementById('streakCal');
+  days.forEach((d,i)=>{
+    const cls=i===4?'streak-day today':done[i]?'streak-day done':'streak-day miss';
+    cal.innerHTML+=`<div class="${cls}" style="font-size:9px;color:${i===4?'#08090A':done[i]?'#C9B99A':'#3a3b3f'};">${d}</div>`;
+  });
+})();
+
+// ================================
+// DSA JOURNEY TOPICS
+// ================================
+const dsaTopics=[
+  {name:'Arrays & Strings',pct:92,done:true},
+  {name:'Dynamic Programming',pct:68,done:false},
+  {name:'Graphs & Trees',pct:45,done:false},
+];
+const dt=document.getElementById('dsaTopics');
+dsaTopics.forEach(t=>{
+  dt.innerHTML+=`<div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+      <div style="display:flex;align-items:center;gap:6px;">
+        ${t.done?`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>`:`<div style="width:12px;height:12px;border-radius:50%;border:1px solid #1a1b1f;"></div>`}
+        <span style="font-size:12px;color:${t.done?'#5a5956':'#F5F0E8'};">${t.name}</span>
+      </div>
+      <span style="font-size:10px;color:#5a5956;">${t.pct}%</span>
+    </div>
+    <div class="prog-bg"><div class="prog-fill" style="width:${t.pct}%;background:${t.done?'#4ADE80':'#C9B99A'};"></div></div>
+  </div>`;
+});
+
+// ================================
+// AI RECOMMENDATIONS
+// ================================
+const aiRecs=[
+  {title:'Segment Tree Range Query',diff:'Hard',reason:'Weak topic'},
+  {title:'Sliding Window Maximum', diff:'Medium',reason:'Not solved yet'},
+  {title:'Graph Coloring',         diff:'Medium',reason:'Pattern match'},
+];
+const ar=document.getElementById('aiRecs');
+aiRecs.forEach(r=>{
+  const bClass=r.diff==='Hard'?'b-h':'b-m';
+  ar.innerHTML+=`<div onclick="window.location.href='problemlist.html'" style="display:flex;align-items:center;justify-content:space-between;padding:9px 10px;background:#0f1012;border-radius:7px;cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background='#131416'" onmouseout="this.style.background='#0f1012'">
+    <div>
+      <p style="font-size:12px;font-weight:500;margin-bottom:2px;">${r.title}</p>
+      <p style="font-size:10px;color:#5a5956;">${r.reason}</p>
+    </div>
+    <span class="${bClass}">${r.diff}</span>
+  </div>`;
+});
+
+// ================================
+// ACHIEVEMENTS
+// ================================
+const achievs=[
+  {icon:'🏆',name:'Elite 100',locked:false},
+  {icon:'🔥',name:'Pyro',locked:false},
+  {icon:'⚔️',name:'Hard Core',locked:false},
+  {icon:'🌟',name:'???',locked:true},
+  {icon:'🚀',name:'???',locked:true},
+  {icon:'💎',name:'???',locked:true},
+];
+const ag=document.getElementById('achievGrid');
+achievs.forEach(a=>{
+  ag.innerHTML+=`<div class="ach-badge">
+    <div class="ach-icon ${a.locked?'locked':''}">${a.locked?'🔒':a.icon}</div>
+    <p style="font-size:9px;color:${a.locked?'#3a3b3f':'#5a5956'};">${a.name}</p>
+  </div>`;
+});
+
+// ================================
+// COUNTDOWN TIMER
+// ================================
+(function startCountdown(){
+  let h=14,m=22,s=0;
+  setInterval(()=>{
+    if(s>0)s--;
+    else if(m>0){m--;s=59;}
+    else if(h>0){h--;m=59;s=59;}
+    document.getElementById('countdown').textContent=`${h}h ${m}m`;
+  },1000);
+})();
+</script>
 </body>
 </html>

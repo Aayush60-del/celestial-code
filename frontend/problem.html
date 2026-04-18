@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem — Celestial Code</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/problem.css">
+  <link rel="stylesheet" href="css/responsive.css">
+ 
+</head>
+<body>
+
+<nav class="navbar">
+  <!-- Left -->
+  <div style="display:flex;align-items:center;gap:16px;">
+    <a href="dashboard.html" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <div style="width:26px;height:26px;border:1px solid #C9B99A;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <div style="width:6px;height:6px;background:#C9B99A;border-radius:50%;"></div>
+      </div>
+      <span style="font-size:14px;font-weight:700;">Celestial <span style="color:#C9B99A;">Code</span></span>
+    </a>
+
+    <!-- Breadcrumb -->
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#5a5956;">
+      <a href="dashboard.html" style="color:#5a5956;text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='#F5F0E8'" onmouseout="this.style.color='#5a5956'">Problems</a>
+      <span>›</span>
+      <span>Dynamic Programming</span>
+      <span>›</span>
+      <span style="color:#F5F0E8;">P-204</span>
+    </div>
+  </div>
+
+  <!-- Center — AI buttons -->
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button class="btn-ai" onclick="openAI('explain')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Explain Code
+    </button>
+    <button class="btn-ai" onclick="openAI('hint')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      Get Hint
+    </button>
+    <button class="btn-ai" onclick="openAI('fix')">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Fix My Code
+    </button>
+  </div>
+
+  <!-- Right — Lang selector + Run + Submit -->
+  <div style="display:flex;align-items:center;gap:8px;">
+    <select class="lang-select" id="langSelect">
+      <option>Python 3.11</option>
+      <option>C++17</option>
+      <option>Java 17</option>
+      <option>JavaScript</option>
+    </select>
+    <button class="btn-run" id="runBtn" onclick="runCode()">Run</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitCode()">Submit</button>
+  </div>
+</nav>
+
+
+<!-- ===== MAIN SPLIT LAYOUT ===== -->
+<div style="display:flex;flex:1;overflow:hidden;">
+
+  <!-- ===== LEFT PANEL ===== -->
+  <div style="width:42%;min-width:300px;display:flex;flex-direction:column;border-right:1px solid #111215;overflow:hidden;" id="leftPanel">
+
+    <!-- Left Tabs -->
+    <div style="display:flex;border-bottom:1px solid #111215;background:#0a0b0e;flex-shrink:0;overflow-x:auto;">
+      <button class="tab-btn active" onclick="switchTab('desc',this)">Description</button>
+      <button class="tab-btn" onclick="switchTab('submit',this)">Submissions</button>
+      <button class="tab-btn" onclick="switchTab('aihelp',this)">AI Help</button>
+    </div>
+
+    <!-- ---- TAB: DESCRIPTION ---- -->
+    <div class="tab-content active" id="tab-desc">
+
+      <!-- Problem header -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span style="font-size:12px;color:#5a5956;font-family:'JetBrains Mono',monospace;">P-204</span>
+        <span class="b-hard">Hard</span>
+        <span style="font-size:11px;color:#5a5956;margin-left:auto;">ID: 1024</span>
+      </div>
+
+      <h1 style="font-size:20px;font-weight:700;margin-bottom:16px;line-height:1.3;letter-spacing:-0.3px;">
+        Celestial Pathfinding:<br>Matrix Pulse
+      </h1>
+
+      <p style="font-size:13px;color:#8A8780;line-height:1.8;margin-bottom:16px;">
+        Given an <code style="background:#111215;padding:1px 5px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#C9B99A;">m × n</code> grid representing a celestial navigation map, determine the <strong style="color:#F5F0E8;">minimum energy path</strong> to travel from the top-left corner to the bottom-right corner. Each cell contains a pulse value that consumes energy.
+      </p>
+
+      <p style="font-size:13px;color:#8A8780;line-height:1.8;margin-bottom:20px;">
+        You can only move <strong style="color:#F5F0E8;">down</strong> or <strong style="color:#F5F0E8;">right</strong>. However, if a cell contains a <strong style="color:#C9B99A;font-style:italic;">Supernova Pulse</strong> (value &lt; 0), you can consume it to regain energy.
+      </p>
+
+      <!-- Example -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5a5956" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#5a5956;font-weight:600;">Example 1</span>
+        </div>
+        <div style="background:#0a0b0e;border:1px solid #111215;border-radius:8px;padding:14px;">
+          <p style="font-size:12px;color:#5a5956;margin-bottom:6px;">Input:</p>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#C9B99A;">grid = [[1,3,1],[1,5,1],[4,2,1]]</code>
+          <p style="font-size:12px;color:#5a5956;margin:10px 0 6px;">Output:</p>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ADE80;">7</code>
+          <p style="font-size:11px;color:#3a3b3f;margin-top:8px;font-style:italic;">Because the path 1→3→1→1→1 minimizes the sum.</p>
+        </div>
+      </div>
+
+      <!-- Constraints -->
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5a5956" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#5a5956;font-weight:600;">Constraints</span>
+        </div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+          <li style="font-size:12px;color:#8A8780;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:3px;background:#C9B99A;border-radius:50%;flex-shrink:0;"></span>
+            <code style="font-family:'JetBrains Mono',monospace;">m == grid.length</code>
+          </li>
+          <li style="font-size:12px;color:#8A8780;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:3px;background:#C9B99A;border-radius:50%;flex-shrink:0;"></span>
+            <code style="font-family:'JetBrains Mono',monospace;">n == grid[i].length</code>
+          </li>
+          <li style="font-size:12px;color:#8A8780;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:3px;background:#C9B99A;border-radius:50%;flex-shrink:0;"></span>
+            <code style="font-family:'JetBrains Mono',monospace;">1 &lt;= m, n &lt;= 200</code>
+          </li>
+          <li style="font-size:12px;color:#8A8780;display:flex;align-items:center;gap:8px;">
+            <span style="width:3px;height:3px;background:#C9B99A;border-radius:50%;flex-shrink:0;"></span>
+            <code style="font-family:'JetBrains Mono',monospace;">0 &lt;= grid[i][j] &lt;= 100</code>
+          </li>
+        </ul>
+      </div>
+
+      <!-- AI Assistant hint box -->
+      <div style="background:linear-gradient(135deg,#1a1030,#0f0820);border:1px solid #2a1f50;border-radius:8px;padding:14px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A78BFA;font-weight:600;">Celestial AI Assistant</span>
+        </div>
+        <p style="font-size:12px;color:#8A8780;line-height:1.7;">
+          "Think about using dynamic programming. If you're at cell (i, j), the minimum cost to reach it is the cell's cost plus the minimum of reaching from top or left."
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ---- TAB: SUBMISSIONS ---- -->
+    <div class="tab-content" id="tab-submit">
+
+      <!-- Result shown here after submit -->
+      <div id="resultArea" style="display:none;">
+
+        <!-- Success / Fail header -->
+        <div id="resultHeader" style="margin-bottom:20px;"></div>
+
+        <!-- Test case dots -->
+        <div style="margin-bottom:16px;">
+          <p style="font-size:10px;color:#5a5956;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Test Case Execution</p>
+          <div id="testDots" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
+
+        <!-- Failed case detail -->
+        <div id="failDetail" style="display:none;background:#0a0b0e;border:1px solid #111215;border-radius:8px;padding:14px;margin-bottom:16px;">
+          <p style="font-size:11px;color:#F87171;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Failed Test Case Details
+          </p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <p style="font-size:10px;color:#5a5956;margin-bottom:5px;">Input:</p>
+              <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#8A8780;display:block;background:#111215;padding:8px;border-radius:5px;">grid = [[1,3,1],<br>[1,5,1],[4,2,1]]</code>
+            </div>
+            <div>
+              <p style="font-size:10px;color:#5a5956;margin-bottom:5px;">Expected:</p>
+              <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4ADE80;display:block;background:#111215;padding:8px;border-radius:5px;">7</code>
+              <p style="font-size:10px;color:#5a5956;margin:5px 0;">Your Output:</p>
+              <code style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#F87171;display:block;background:#111215;padding:8px;border-radius:5px;" id="yourOutput">-</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Insight on failure -->
+        <div id="aiInsight" style="display:none;background:linear-gradient(135deg,#1a1030,#0f0820);border:1px solid #2a1f50;border-radius:8px;padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#A78BFA;font-weight:600;">AI Insight</span>
+          </div>
+          <p id="aiInsightText" style="font-size:12px;color:#8A8780;line-height:1.7;"></p>
+          <button onclick="openAI('fix')" style="margin-top:10px;padding:7px 14px;background:#7C3AED;border:none;border-radius:6px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;">Apply AI Fix</button>
+        </div>
+
+      </div>
+
+      <!-- Empty state — no submissions yet -->
+      <div id="noSubmissions" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60%;gap:10px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1a1b1f" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        <p style="font-size:13px;color:#3a3b3f;">No submissions yet</p>
+        <p style="font-size:12px;color:#2a2b2f;">Write your solution and hit Submit</p>
+      </div>
+
+    </div>
+
+    <!-- ---- TAB: AI HELP ---- -->
+    <div class="tab-content" id="tab-aihelp">
+      <p style="font-size:14px;font-weight:600;margin-bottom:16px;">Celestial AI Help</p>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+
+        <button onclick="openAI('explain')" style="padding:12px 14px;background:#0a0b0e;border:1px solid #111215;border-radius:8px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-align:left;transition:border-color 0.15s;display:flex;align-items:center;gap:10px;" onmouseover="this.style.borderColor='#C9B99A33'" onmouseout="this.style.borderColor='#111215'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9B99A" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div>
+            <p>Explain My Code</p>
+            <p style="font-size:11px;color:#5a5956;margin-top:2px;">Line by line breakdown</p>
+          </div>
+        </button>
+
+        <button onclick="openAI('hint')" style="padding:12px 14px;background:#0a0b0e;border:1px solid #111215;border-radius:8px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-align:left;transition:border-color 0.15s;display:flex;align-items:center;gap:10px;" onmouseover="this.style.borderColor='#C9B99A33'" onmouseout="this.style.borderColor='#111215'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9B99A" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+          <div>
+            <p>Get Hint</p>
+            <p style="font-size:11px;color:#5a5956;margin-top:2px;">Progressive hints (3 levels)</p>
+          </div>
+        </button>
+
+        <button onclick="openAI('fix')" style="padding:12px 14px;background:#0a0b0e;border:1px solid #111215;border-radius:8px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;text-align:left;transition:border-color 0.15s;display:flex;align-items:center;gap:10px;" onmouseover="this.style.borderColor='#C9B99A33'" onmouseout="this.style.borderColor='#111215'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9B99A" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <div>
+            <p>Fix My Code</p>
+            <p style="font-size:11px;color:#5a5956;margin-top:2px;">AI auto bug detection</p>
+          </div>
+        </button>
+
+      </div>
+
+      <!-- AI response shows here -->
+      <div id="aiHelpResponse" class="ai-response" style="margin-top:16px;"></div>
+    </div>
+
+  </div>
+
+  <!-- Vertical Divider -->
+  <div class="vdivider"></div>
+
+  <!-- ===== RIGHT PANEL — Editor ===== -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;">
+
+    <!-- LOCK OVERLAY — bina login ke -->
+    <div class="lock-overlay" id="lockOverlay" style="display:none;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#5a5956" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <p style="font-size:15px;font-weight:600;color:#F5F0E8;">Login to start coding</p>
+      <p style="font-size:12px;color:#5a5956;text-align:center;max-width:220px;">Create a free account to write, run and submit your solution</p>
+      <button onclick="window.location.href='login.html'" style="padding:10px 24px;background:#F5F0E8;border:none;border-radius:7px;color:#08090A;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Sign In Free</button>
+    </div>
+
+    <!-- Editor area -->
+    <div style="flex:1;overflow:hidden;position:relative;">
+      <textarea id="codeEditor" spellcheck="false">class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        # Initialize dimensions
+        m, n = len(grid), len(grid[0])
+
+        # DP calculation for first row
+        for j in range(1, n):
+            grid[0][j] += grid[0][j-1]
+
+        # DP calculation for first column
+        for i in range(1, m):
+            grid[i][0] += grid[i-1][0]
+
+        # Your implementation here...
+        _</textarea>
+    </div>
+
+    <!-- Horizontal divider -->
+    <div class="hdivider"></div>
+
+    <!-- ===== BOTTOM PANEL ===== -->
+    <div style="height:220px;flex-shrink:0;display:flex;flex-direction:column;border-top:1px solid #111215;">
+
+      <!-- Bottom tabs -->
+      <div style="display:flex;border-bottom:1px solid #111215;background:#0a0b0e;flex-shrink:0;padding:0 4px;">
+        <button class="btab-btn active" onclick="switchBTab('testcase',this)">Testcase</button>
+        <button class="btab-btn" onclick="switchBTab('result',this)">Result</button>
+        <button class="btab-btn" onclick="switchBTab('console',this)">Console</button>
+        <button style="margin-left:auto;margin-right:4px;" class="btab-btn" onclick="toggleBottomPanel()">↓</button>
+      </div>
+
+      <!-- Testcase tab -->
+      <div class="btab-content active" id="btab-testcase">
+        <!-- Case selector -->
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <button onclick="selectCase(1,this)" style="padding:4px 12px;background:#111215;border:1px solid #1a1b1f;border-radius:5px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;border-color:#C9B99A;">Case 1</button>
+          <button onclick="selectCase(2,this)" style="padding:4px 12px;background:#111215;border:1px solid #1a1b1f;border-radius:5px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;">Case 2</button>
+          <button onclick="selectCase(3,this)" style="padding:4px 12px;background:#111215;border:1px solid #1a1b1f;border-radius:5px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;">Case 3</button>
+        </div>
+        <p style="font-size:10px;color:#5a5956;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Input: grid =</p>
+        <textarea id="testInput" style="width:100%;background:#0a0b0e;border:1px solid #111215;border-radius:6px;color:#C9B99A;font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px;outline:none;resize:none;height:60px;">[[1,3,1],[1,5,1],[4,2,1]]</textarea>
+        <p style="font-size:10px;color:#5a5956;letter-spacing:1px;text-transform:uppercase;margin-top:8px;margin-bottom:4px;">Expected Output:</p>
+        <code id="expectedOutput" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#4ADE80;">7</code>
+      </div>
+
+      <!-- Result tab -->
+      <div class="btab-content" id="btab-result">
+        <div id="bottomResult" style="font-size:13px;color:#5a5956;">Run your code to see results here.</div>
+      </div>
+
+      <!-- Console tab -->
+      <div class="btab-content" id="btab-console">
+        <div id="consoleOutput" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5a5956;line-height:1.7;">
+          &gt; Ready. Run your code to see console output.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== AI LANGUAGE MODAL ===== -->
+<div class="modal-bg" id="aiModal">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+        <span style="font-size:14px;font-weight:600;" id="modalTitle">Explain Code</span>
+      </div>
+      <button onclick="closeAI()" style="background:transparent;border:none;color:#5a5956;cursor:pointer;font-size:18px;line-height:1;">×</button>
+    </div>
+    <p style="font-size:12px;color:#5a5956;margin-bottom:20px;">Choose explanation language:</p>
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <button class="lang-btn" onclick="getAIResponse('english')">
+        🌍 English<br>
+        <span style="font-size:10px;color:#3a3b3f;">Technical explanation</span>
+      </button>
+      <button class="lang-btn" onclick="getAIResponse('hinglish')">
+        🇮🇳 Hinglish<br>
+        <span style="font-size:10px;color:#3a3b3f;">Simple bhaasha mein</span>
+      </button>
+    </div>
+    <!-- AI response inside modal -->
+    <div id="modalResponse" style="display:none;background:#0a0b0e;border:1px solid #111215;border-radius:8px;padding:14px;font-size:13px;color:#8A8780;line-height:1.8;max-height:200px;overflow-y:auto;"></div>
+    <!-- Loading -->
+    <div id="modalLoading" style="display:none;text-align:center;padding:20px;color:#5a5956;font-size:13px;">
+      <div style="display:inline-block;width:16px;height:16px;border:2px solid #1a1b1f;border-top-color:#C9B99A;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:8px;vertical-align:middle;"></div>
+      Celestial AI is thinking...
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+</style>
+
+<script src="js/problem.js"></script>
+
+
+
+</body>
+</html>

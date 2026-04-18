@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Celestial Code</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="./css/setting.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="dashboard.html" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+    <div style="width:28px;height:28px;border:1px solid #C9B99A;border-radius:50%;display:flex;align-items:center;justify-content:center;"><div style="width:7px;height:7px;background:#C9B99A;border-radius:50%;box-shadow:0 0 6px #C9B99A;"></div></div>
+    <span style="font-size:15px;font-weight:700;">Celestial <span style="color:#C9B99A;">Code</span></span>
+  </a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div style="width:30px;height:30px;border-radius:50%;background:#1a1b1f;border:1px solid #C9B99A33;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#C9B99A;">A</div>
+  </div>
+</nav>
+
+<div style="display:flex;">
+  <!-- SIDEBAR -->
+  <aside style="width:200px;min-width:200px;height:calc(100vh - 52px);position:sticky;top:52px;border-right:1px solid #111215;display:flex;flex-direction:column;padding:20px 12px;">
+    <a href="dashboard.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a>
+    <a href="problemlist.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>Problems</a>
+    <a href="profile.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+    <a href="leaderboard.html" class="nav-link"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Leaderboard</a>
+    <a href="setting.html" class="nav-link active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</a>
+    <div style="flex:1;"></div>
+    <div style="border:1px solid #1a1b1f;border-radius:8px;padding:12px;">
+      <p style="font-size:11px;color:#5a5956;margin-bottom:8px;">Unlock all features</p>
+      <button style="width:100%;padding:7px;background:#F5F0E8;color:#08090A;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Upgrade to Pro</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main style="flex:1;padding:28px;min-width:0;display:flex;gap:20px;">
+
+    <!-- LEFT — Settings nav -->
+    <div style="width:180px;min-width:180px;flex-shrink:0;">
+      <p style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#3a3b3f;font-weight:600;margin-bottom:12px;padding:0 12px;">Settings</p>
+      <button class="settings-nav-btn active" onclick="showSection('profile',this)">👤 Profile</button>
+      <button class="settings-nav-btn" onclick="showSection('account',this)">🔐 Account</button>
+      <button class="settings-nav-btn" onclick="showSection('editor',this)">💻 Editor</button>
+      <button class="settings-nav-btn" onclick="showSection('ai',this)">✨ AI Preferences</button>
+      <button class="settings-nav-btn" onclick="showSection('notif',this)">🔔 Notifications</button>
+      <button class="settings-nav-btn" onclick="showSection('danger',this)">⚠️ Danger Zone</button>
+    </div>
+
+    <!-- RIGHT — Settings content -->
+    <div style="flex:1;max-width:640px;">
+
+      <!-- PROFILE SECTION -->
+      <div id="sec-profile" class="fu" style="animation-delay:0.05s;">
+        <p class="sec-title">Profile Settings</p>
+        <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+
+          <!-- Avatar -->
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #0f1012;">
+            <div style="width:60px;height:60px;border-radius:12px;background:#1a1b1f;border:1px solid #C9B99A33;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#C9B99A;">A</div>
+            <div>
+              <button style="padding:7px 14px;background:transparent;border:1px solid #1a1b1f;border-radius:6px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;margin-right:8px;" onmouseover="this.style.borderColor='#2a2b2f'" onmouseout="this.style.borderColor='#1a1b1f'">Change Photo</button>
+              <span style="font-size:11px;color:#5a5956;">JPG or PNG, max 2MB</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <div>
+              <label style="font-size:11px;color:#5a5956;display:block;margin-bottom:6px;letter-spacing:0.5px;">Full Name</label>
+              <input class="form-input" value="Alex Sterling">
+            </div>
+            <div>
+              <label style="font-size:11px;color:#5a5956;display:block;margin-bottom:6px;letter-spacing:0.5px;">Username</label>
+              <input class="form-input" value="Dev_X">
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="font-size:11px;color:#5a5956;display:block;margin-bottom:6px;letter-spacing:0.5px;">Bio</label>
+            <textarea class="form-input" rows="3" placeholder="Tell the community about yourself..." style="resize:none;">Senior Core Architect. C++ enthusiast. Building fast systems.</textarea>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <label style="font-size:11px;color:#5a5956;display:block;margin-bottom:6px;letter-spacing:0.5px;">Location</label>
+            <input class="form-input" value="San Francisco, CA" style="max-width:280px;">
+          </div>
+
+          <button class="save-btn" onclick="showToast('Profile saved!')">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- ACCOUNT SECTION -->
+      <div id="sec-account" style="display:none;">
+        <p class="sec-title">Account & Security</p>
+        <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:11px;color:#5a5956;display:block;margin-bottom:6px;">Email Address</label>
+            <input class="form-input" value="alex@celestialcode.dev" style="max-width:320px;">
+          </div>
+
+          <div style="padding-top:16px;border-top:1px solid #0f1012;margin-bottom:16px;">
+            <p style="font-size:13px;font-weight:600;margin-bottom:12px;">Change Password</p>
+            <div style="display:flex;flex-direction:column;gap:10px;max-width:320px;">
+              <input class="form-input" type="password" placeholder="Current password">
+              <input class="form-input" type="password" placeholder="New password">
+              <input class="form-input" type="password" placeholder="Confirm new password">
+            </div>
+          </div>
+
+          <div class="setting-row" style="padding-top:16px;border-top:1px solid #0f1012;">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Two-Factor Authentication</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Secure your account with 2FA</p>
+            </div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+
+          <div style="margin-top:16px;">
+            <button class="save-btn" onclick="showToast('Account updated!')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDITOR SECTION -->
+      <div id="sec-editor" style="display:none;">
+        <p class="sec-title">Editor Preferences</p>
+        <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Default Language</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Pre-selected in code editor</p>
+            </div>
+            <select class="select-input">
+              <option selected>Python 3.11</option>
+              <option>C++17</option>
+              <option>Java 17</option>
+              <option>JavaScript</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Font Size</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Editor code font size</p>
+            </div>
+            <select class="select-input">
+              <option>12px</option>
+              <option selected>13px</option>
+              <option>14px</option>
+              <option>16px</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Tab Size</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Spaces per tab indent</p>
+            </div>
+            <select class="select-input">
+              <option>2 spaces</option>
+              <option selected>4 spaces</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Auto Complete</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">AI-powered code suggestions</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Line Numbers</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Show line numbers in editor</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+
+          <div style="margin-top:16px;">
+            <button class="save-btn" onclick="showToast('Editor settings saved!')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI SECTION -->
+      <div id="sec-ai" style="display:none;">
+        <p class="sec-title">AI Preferences</p>
+        <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Default AI Language</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Explanation language preference</p>
+            </div>
+            <select class="select-input">
+              <option>English</option>
+              <option selected>Hinglish</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">AI Hint Level</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Default hint depth</p>
+            </div>
+            <select class="select-input">
+              <option>Subtle (Level 1)</option>
+              <option selected>Moderate (Level 2)</option>
+              <option>Direct (Level 3)</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Auto Show AI Hint</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Show hint after 15 mins on a problem</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">AI Code Review on Submit</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Auto analyze submission after wrong answer</p>
+            </div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+
+          <div style="margin-top:16px;">
+            <button class="save-btn" onclick="showToast('AI preferences saved!')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS SECTION -->
+      <div id="sec-notif" style="display:none;">
+        <p class="sec-title">Notification Settings</p>
+        <div style="border:1px solid #111215;border-radius:10px;padding:20px;background:#08090A;">
+
+          <div class="setting-row">
+            <div><p style="font-size:13px;font-weight:500;">Daily Challenge Reminder</p><p style="font-size:11px;color:#5a5956;margin-top:2px;">Get reminded every day at 9am</p></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><p style="font-size:13px;font-weight:500;">Streak Alerts</p><p style="font-size:11px;color:#5a5956;margin-top:2px;">Notify before your streak breaks</p></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><p style="font-size:13px;font-weight:500;">New Badge Earned</p><p style="font-size:11px;color:#5a5956;margin-top:2px;">Celebrate achievements</p></div>
+            <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><p style="font-size:13px;font-weight:500;">Weekly Report</p><p style="font-size:11px;color:#5a5956;margin-top:2px;">Summary of your weekly performance</p></div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div><p style="font-size:13px;font-weight:500;">Leaderboard Updates</p><p style="font-size:11px;color:#5a5956;margin-top:2px;">When your rank changes significantly</p></div>
+            <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+          </div>
+          <div style="margin-top:16px;">
+            <button class="save-btn" onclick="showToast('Notification settings saved!')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DANGER ZONE -->
+      <div id="sec-danger" style="display:none;">
+        <p class="sec-title">Danger Zone</p>
+        <div style="border:1px solid rgba(248,113,113,0.15);border-radius:10px;padding:20px;background:#08090A;">
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Reset Progress</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Clear all solved problems and XP. Cannot be undone.</p>
+            </div>
+            <button class="danger-btn" onclick="if(confirm('Are you sure? This cannot be undone.')) showToast('Progress reset.')">Reset</button>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;">Export Data</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Download all your submissions and stats as JSON</p>
+            </div>
+            <button style="padding:9px 22px;background:transparent;border:1px solid #1a1b1f;border-radius:7px;color:#8A8780;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;" onclick="showToast('Export started. Check your email.')">Export</button>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <p style="font-size:13px;font-weight:500;color:#F87171;">Delete Account</p>
+              <p style="font-size:11px;color:#5a5956;margin-top:2px;">Permanently delete your account and all data.</p>
+            </div>
+            <button class="danger-btn" onclick="if(confirm('DELETE your account? This is permanent.')) alert('Account deletion requested.')">Delete Account</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:#0f1012;border:1px solid #1a1b1f;border-radius:8px;padding:12px 20px;font-size:13px;color:#F5F0E8;transition:transform 0.3s ease;z-index:999;display:flex;align-items:center;gap:8px;">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.settings-nav-btn').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById('sec-' + id);
+  sec.style.display = 'block';
+  sec.style.animation = 'fadeUp 0.3s ease forwards';
+  btn.classList.add('active');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(() => { toast.style.transform = 'translateX(-50%) translateY(60px)'; }, 2500);
+}
+</script>
+</body>
+</html>

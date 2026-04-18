@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems — Celestial Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+        
+        <link rel="stylesheet" href="./css/problemlist.css">
+        <link rel="stylesheet" href="css/responsive.css">
+   
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="dashboard.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;">
+            <div style="width:28px;height:28px;border:1px solid #C9B99A;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                <div style="width:7px;height:7px;background:#C9B99A;border-radius:50%;box-shadow:0 0 6px #C9B99A;"></div>
+            </div>
+            <span style="font-size:15px;font-weight:700;">Celestial <span style="color:#C9B99A;">Code</span></span>
+        </a>
+        <div style="position:relative;flex:1;max-width:400px;margin:0 24px;">
+            <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:0.3;" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5F0E8" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input class="search-main" type="text" id="mainSearch" placeholder="Search problems by title, tag, or company...">
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+            <div style="display:flex;align-items:center;gap:6px;background:#0f1012;border:1px solid #1a1b1f;border-radius:20px;padding:5px 12px;">
+                <span style="font-size:14px;">🔥</span>
+                <span style="font-size:13px;font-weight:600;">24</span>
+                <span style="font-size:12px;color:#5a5956;">day streak</span>
+            </div>
+            <div style="width:30px;height:30px;border-radius:50%;background:#1a1b1f;border:1px solid #C9B99A33;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#C9B99A;cursor:pointer;"
+                onclick="window.location.href='profile.html'">A</div>
+        </div>
+    </nav>
+
+    <div style="display:flex;">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <p class="sec-label" style="margin-bottom:12px;padding:0 10px;">Navigate</p>
+            <a href="dashboard.html" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="problemlist.html" class="nav-link active">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+                Problems
+            </a>
+            <a href="profile.html" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Profile
+            </a>
+            <a href="leaderboard.html" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Leaderboard
+            </a>
+            <a href="settings.html" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Settings
+            </a>
+
+            <div style="flex:1;"></div>
+            <div style="border:1px solid #1a1b1f;border-radius:8px;padding:12px;">
+                <p style="font-size:11px;color:#5a5956;margin-bottom:8px;">Unlock AI hints & explanations</p>
+                <button style="width:100%;padding:7px;background:#F5F0E8;color:#08090A;border:none;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Upgrade to Pro</button>
+            </div>
+        </aside>
+
+        <!-- MAIN + RIGHT SIDEBAR -->
+        <div style="flex:1;display:flex;min-width:0;">
+
+            <!-- MAIN CONTENT -->
+            <main style="flex:1;padding:24px;min-width:0;">
+
+                <!-- PAGE HEADER -->
+                <div class="fu fu1" style="margin-bottom:24px;">
+                    <h1 style="font-size:24px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;">Problem Set</h1>
+                    <p style="font-size:13px;color:#5a5956;">2,400+ problems across all topics and difficulty levels</p>
+                </div>
+
+                <!-- CELESTIAL TRACK BADGES -->
+                <div class="fu fu2" style="margin-bottom:20px;">
+                    <p class="sec-label" style="margin-bottom:12px;">Celestial Learning Tracks</p>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        <button class="celestial-badge cb-dsa active" onclick="filterTrack('dsa',this)">🌌 DSA Galaxy</button>
+                        <button class="celestial-badge cb-sys" onclick="filterTrack('system',this)">🚀 System Design Orbit</button>
+                        <button class="celestial-badge cb-js" onclick="filterTrack('js',this)">🪐 JavaScript Planet</button>
+                        <button class="celestial-badge cb-int" onclick="filterTrack('interview',this)">🌠 Interview Prep Zone</button>
+                        <button class="celestial-badge" style="background:rgba(248,113,113,0.07);border-color:rgba(248,113,113,0.2);color:#F87171;" onclick="filterTrack('contest',this)">☄️ Contest Arena</button>
+                    </div>
+                </div>
+
+                <!-- FILTER ROW -->
+                <div class="fu fu2" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+                    <div style="display:flex;gap:5px;">
+                        <button class="diff-btn active" onclick="filterDiff('all',this)">All</button>
+                        <button class="diff-btn" onclick="filterDiff('Easy',this)">Easy</button>
+                        <button class="diff-btn" onclick="filterDiff('Medium',this)">Medium</button>
+                        <button class="diff-btn" onclick="filterDiff('Hard',this)">Hard</button>
+                    </div>
+                    <div style="width:1px;height:20px;background:#1a1b1f;"></div>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap;" id="tagFilters"></div>
+                    <div style="width:1px;height:20px;background:#1a1b1f;"></div>
+                    <!-- FIX 3: status buttons now have a shared class for easy active-state management -->
+                    <div style="display:flex;gap:5px;" id="statusBtns">
+                        <button class="diff-btn active" onclick="filterStatus('all',this)">All Status</button>
+                        <button class="diff-btn" onclick="filterStatus('solved',this)">✓ Solved</button>
+                        <button class="diff-btn" onclick="filterStatus('unsolved',this)">○ Unsolved</button>
+                    </div>
+                </div>
+
+                <!-- RESULTS COUNT -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                    <p style="font-size:12px;color:#5a5956;">
+                        <span id="resultCount" style="color:#F5F0E8;font-weight:600;">24</span> problems found
+                    </p>
+                    <div style="display:flex;align-items:center;gap:6px;">
+                        <p style="font-size:12px;color:#5a5956;">Sort by:</p>
+                        <select style="background:#0f1012;border:1px solid #1a1b1f;border-radius:6px;padding:4px 8px;color:#F5F0E8;font-family:'Outfit',sans-serif;font-size:12px;outline:none;cursor:pointer;" onchange="sortProblems(this.value)">
+                            <option value="id">Problem No.</option>
+                            <option value="acceptance">Acceptance</option>
+                            <option value="difficulty">Difficulty</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PROBLEM TABLE -->
+                <div style="border:1px solid #111215;border-radius:10px;overflow:hidden;background:#08090A;">
+                    <div style="display:grid;grid-template-columns:52px 1fr 100px 80px 120px 50px;padding:10px 20px;border-bottom:1px solid #0f1012;background:#08090A;">
+                        <span class="sec-label">#</span>
+                        <span class="sec-label">Title</span>
+                        <span class="sec-label">Difficulty</span>
+                        <span class="sec-label">Accept %</span>
+                        <span class="sec-label">Tags</span>
+                        <span class="sec-label">Status</span>
+                    </div>
+                    <div id="problemTable"></div>
+                    <div style="padding:14px;text-align:center;border-top:1px solid #0f1012;">
+                        <button id="loadMoreBtn" onclick="loadMore()"
+                            style="font-size:12px;color:#5a5956;background:transparent;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:'Outfit',sans-serif;padding:6px 16px;border-radius:6px;transition:all 0.15s;"
+                            onmouseover="this.style.color='#F5F0E8';this.style.background='#0f1012'"
+                            onmouseout="this.style.color='#5a5956';this.style.background='transparent'">
+                            Load More Problems
+                        </button>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- RIGHT SIDEBAR -->
+            <aside style="width:220px;min-width:220px;padding:24px 16px;border-left:1px solid #111215;height:calc(100vh - 52px);position:sticky;top:52px;overflow-y:auto;">
+
+                <!-- PROGRESS STATS -->
+                <div class="side-stat fu fu1">
+                    <p class="sec-label" style="margin-bottom:12px;">Your Progress</p>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:#4ADE80;">Easy</span>
+                            <span style="font-size:12px;font-weight:600;">142 / 580</span>
+                        </div>
+                        <div style="background:#111215;border-radius:2px;height:3px;">
+                            <div style="width:24%;height:100%;background:#4ADE80;border-radius:2px;"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:#FBBF24;">Medium</span>
+                            <span style="font-size:12px;font-weight:600;">89 / 1,200</span>
+                        </div>
+                        <div style="background:#111215;border-radius:2px;height:3px;">
+                            <div style="width:7%;height:100%;background:#FBBF24;border-radius:2px;"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-size:12px;color:#F87171;">Hard</span>
+                            <span style="font-size:12px;font-weight:600;">31 / 620</span>
+                        </div>
+                        <div style="background:#111215;border-radius:2px;height:3px;">
+                            <div style="width:5%;height:100%;background:#F87171;border-radius:2px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STREAK CALENDAR -->
+                <div class="side-stat fu fu2">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                        <button onclick="changeMonth(-1)" style="background:none;border:none;color:#C9B99A;cursor:pointer;">◀</button>
+                        <p id="monthLabel" class="sec-label" style="font-size:12px;"></p>
+                        <button onclick="changeMonth(1)" style="background:none;border:none;color:#C9B99A;cursor:pointer;">▶</button>
+                    </div>
+                    <div id="calendarGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+                </div>
+
+                <!-- TRENDING COMPANIES -->
+                <div class="fu fu2" style="margin-bottom:14px;">
+                    <p class="sec-label" style="margin-bottom:10px;">Trending Companies</p>
+                    <div id="companies"></div>
+                </div>
+
+                <!-- TOPIC MASTERY -->
+                <div class="fu fu3">
+                    <p class="sec-label" style="margin-bottom:10px;">Topic Mastery</p>
+                    <div id="topicMastery"></div>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+    <script src="./js/problemlist.js"></script>
+</body>
+</html>

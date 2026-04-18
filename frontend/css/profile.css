@@ -1,0 +1,199 @@
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #08090A;
+            color: #F5F0E8;
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #08090A;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1a1b1f;
+            border-radius: 2px;
+        }
+
+        .navbar {
+            height: 52px;
+            background: rgba(8, 9, 10, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #111215;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #5a5956;
+            text-decoration: none;
+            transition: all 0.15s;
+            margin-bottom: 1px;
+        }
+
+        .nav-link:hover {
+            color: #F5F0E8;
+            background: #111215;
+        }
+
+        .nav-link.active {
+            color: #F5F0E8;
+            background: #111215;
+        }
+
+        .skill-bar-bg {
+            background: #111215;
+            border-radius: 2px;
+            height: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: #C9B99A;
+            transition: width 1.2s ease;
+            width: 0%;
+        }
+
+                .heat-cell {
+                    /* margin: 1px; */
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: #2a2a2a;
+} 
+
+        .heat-1 {
+            background: #2a2318;
+            border: 1px solid #3a3020;
+        }
+
+        .heat-2 {
+            background: #4a3d28;
+        }
+
+        .heat-3 {
+            background: #7a6440;
+        }
+
+        .heat-4 {
+            background: #C9B99A;
+        }
+
+        .sub-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 80px 80px 80px 24px;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #0f1012;
+            cursor: pointer;
+            transition: background 0.12s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .sub-row:hover {
+            background: #0c0d10;
+        }
+
+        .b-e {
+            color: #4ADE80;
+            background: rgba(74, 222, 128, 0.07);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .b-m {
+            color: #FBBF24;
+            background: rgba(251, 191, 36, 0.07);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .b-h {
+            color: #F87171;
+            background: rgba(248, 113, 113, 0.07);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border: 1px solid #1a1b1f;
+        }
+
+        .badge-icon.locked {
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fu {
+            animation: fadeUp 0.5s ease forwards;
+        }
+
+        .fu1 {
+            animation-delay: 0.05s;
+            opacity: 0;
+        }
+
+        .fu2 {
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .fu3 {
+            animation-delay: 0.15s;
+            opacity: 0;
+        }
+
+        .fu4 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }

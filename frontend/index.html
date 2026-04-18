@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Celestial Code</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  
-  <body class="bg-[#08090A] overflow-hidden">
-    
-    <div id="introWrapper">
-      
-      
-      <canvas id="starCanvas" class="fixed inset-0 z-[1]"></canvas>\n      \n      <div id="introContent"\n      class="fixed z-10 text-center -translate-x-1/2 -translate-y-1/2 opacity-0 top-1/2 left-1/2">
-      
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celestial Code</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body class="bg-[#08090A] overflow-hidden">
+
+  <div id="introWrapper">
+
+
+    <canvas id="starCanvas" class="fixed inset-0 z-[1]"></canvas>
+    <div id="introContent" \n
+      class="fixed z-10 text-center -translate-x-1/2 -translate-y-1/2 opacity-0 top-1/2 left-1/2">
+
       <div id="orbitRing"
         class="w-[120px] h-[120px] border border-[#C9B99A] rounded-full mx-auto mb-8 relative scale-0 opacity-0">
-        
+
         <div id="centerStar"
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#F5F0E8] rounded-full shadow-[0_0_20px_#F5F0E8,0_0_40px_#C9B99A]">
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#F5F0E8] rounded-full shadow-[0_0_20px_#F5F0E8,0_0_40px_#C9B99A]">
         </div>
       </div>
-      
-      <h1 id="logoText"
-        class="text-[42px] font-bold text-[#F5F0E8] opacity-0 translate-y-2">
+
+      <h1 id="logoText" class="text-[42px] font-bold text-[#F5F0E8] opacity-0 translate-y-2">
         Celestial <span class="text-[#C9B99A]">Code</span>
       </h1>
-      
-      <p id="tagline"
-        class="text-xs tracking-[4px] uppercase text-gray-400 mt-2 opacity-0">
+
+      <p id="tagline" class="text-xs tracking-[4px] uppercase text-gray-400 mt-2 opacity-0">
         Code Beyond Limits
       </p>
-      
-      <div id="loadingBar"
-        class="w-[200px] h-[1px] bg-[#1E1F23] mx-auto mt-8 rounded overflow-hidden opacity-0">
 
-        <div id="loadingBarFill"
-        class="h-full w-0 bg-gradient-to-r from-gray-400 to-[#C9B99A]">
+      <div id="loadingBar" class="w-[200px] h-[1px] bg-[#1E1F23] mx-auto mt-8 rounded overflow-hidden opacity-0">
+
+        <div id="loadingBarFill" class="h-full w-0 bg-gradient-to-r from-gray-400 to-[#C9B99A]">
+        </div>
       </div>
-    </div>
-    
-    <button id="enterBtn"
-    onclick="enterPlatform()"
-    class="mt-10 px-9 py-3 border border-[#C9B99A] text-[#C9B99A] text-xs tracking-[3px] uppercase rounded opacity-0 hover:bg-[#C9B99A] hover:text-black transition">
-    Enter Platform
-  </button>
-  
-</div>
-</div>
 
-<script src="js/intro.js"></script>
+      <button id="enterBtn" onclick="enterPlatform()"
+        class="mt-10 px-9 py-3 border border-[#C9B99A] text-[#C9B99A] text-xs tracking-[3px] uppercase rounded opacity-0 hover:bg-[#C9B99A] hover:text-black transition">
+        Enter Platform
+      </button>
+
+    </div>
+  </div>
+
+  <script src="js/intro"></script>
 
 </body>
+
 </html>
